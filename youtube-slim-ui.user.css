@@ -75,7 +75,7 @@ Customize as preferred.
   /* Hide top bar */
   #masthead[fullscreen],
   #masthead[theater] {
-    height: 0;
+    position: fixed;
   }
   #masthead[theater]:not([fullscreen]) {
     opacity: 0;
