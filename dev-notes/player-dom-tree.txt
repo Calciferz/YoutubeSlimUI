@@ -1,10 +1,18 @@
 $('#movie_player')
 
 
-movie_player - basic mode
+movie_player - skeleton
 --
-ytd-page-manager#page-manager  >  ytd-watch-flexy.ytd-page-manager  >  div#columns
->  div#primary  >  div#primary-inner
+div#player.skeleton
+>  div#player-wrap
+>  div#player-api
+>  div#movie_player.html5-video-player
+
+
+movie_player - default mode
+--
+ytd-page-manager#page-manager  >  ytd-watch-flexy.ytd-page-manager
+>  div#columns  >  div#primary  >  div#primary-inner
 >  div#player  >  div#player-container-outer  >  div#player-container-inner
 >> div#player-container  >  ytd-player#ytd-player  >  div#container
 >  div#movie_player.html5-video-player
@@ -75,5 +83,6 @@ title
 .ytp-chrome-top
 .ytp-title
 > .ytp-title-text
+
 
 

@@ -309,6 +309,31 @@ Customize as preferred.
 
 
 
+  /* Hide controls while loading */
+  #player.skeleton {
+    & .ytp-large-play-button,
+    & .html5-video-player > *:not(.ytp-cued-thumbnail-overlay) {
+      display: none;
+    }
+  }
+  #masthead {
+    visibility: hidden;
+  }
+  #content.ytd-app:is( :has(#movie_player) , :has(> ytd-browse) ) #masthead {
+    visibility: unset;
+  }
+  /* Disable loading skeleton */
+  #watch-page-skeleton {
+    display: none;
+  }
+  ytd-masthead.shell {
+    display: none;
+  }
+  body {
+    overflow-y: scroll;
+  }
+
+
   /* Move description's "Show less" button up: to the same position and size as the collapsed button that expands it */
   ytd-text-inline-expander {
     contain: unset;
