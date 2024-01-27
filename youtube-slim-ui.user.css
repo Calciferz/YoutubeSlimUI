@@ -338,6 +338,17 @@ Customize as preferred.
 
 
 
+  /* Caption background is less transparent */
+  .ytp-caption-segment {
+    background-color: rgba(8, 8, 8, 0.5) !important;
+  }
+  /* Captions don't move up on mouse activity */
+  #movie_player .caption-window {
+    margin-bottom: unset;
+  }
+
+
+
   /* Enhancer for Youtube addon's style fixes */
   .ytd-watch-flexy:not(#engagement-panel-scrim) {
     background-color: unset !important;
