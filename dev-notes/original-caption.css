@@ -1,0 +1,140 @@
+
+.caption-window.ytp-caption-window-top {
+    margin-top: 48px;
+    -webkit-transition: margin-bottom .25s cubic-bezier(0,0,.2,1),margin-top .25s cubic-bezier(0,0,.2,1);
+    transition: margin-bottom .25s cubic-bezier(0,0,.2,1),margin-top .25s cubic-bezier(0,0,.2,1)
+}
+
+
+.ytp-embed:not(.ad-showing) .caption-window.ytp-caption-window-top {
+    margin-top: 60px
+}
+
+.ytp-big-mode .caption-window.ytp-caption-window-top {
+    margin-top: 69px
+}
+
+.ytp-big-mode.ytp-embed:not(.ad-showing) .caption-window.ytp-caption-window-top {
+    margin-top: 89px
+}
+
+
+.ytp-autohide .caption-window.ytp-caption-window-top,
+.ytp-hide-info-bar .caption-window.ytp-caption-window-top {
+    margin-top: 0;
+    -webkit-transition: margin-bottom .1s cubic-bezier(.4,0,1,1),margin-top .1s cubic-bezier(.4,0,1,1);
+    transition: margin-bottom .1s cubic-bezier(.4,0,1,1),margin-top .1s cubic-bezier(.4,0,1,1)
+}
+
+
+
+
+.caption-window.ytp-caption-window-bottom {
+    margin-bottom: 61px;
+    -webkit-transition: margin-bottom .25s cubic-bezier(0,0,.2,1),margin-top .25s cubic-bezier(0,0,.2,1);
+    transition: margin-bottom .25s cubic-bezier(0,0,.2,1),margin-top .25s cubic-bezier(0,0,.2,1)
+}
+
+
+.ytp-fine-scrubbing-enable
+--
+.ytp-fine-scrubbing-enable .caption-window.ytp-caption-window-bottom {
+    margin-bottom: 110px
+}
+
+.ytp-fine-scrubbing-enable.ytp-ad-overlay-open .caption-window.ytp-caption-window-bottom {
+    margin-bottom: 200px
+}
+
+.ytp-big-mode.ytp-fine-scrubbing-enable .caption-window.ytp-caption-window-bottom {
+    margin-bottom: 155px
+}
+
+
+.ytp-embed .caption-window.ytp-caption-window-bottom {
+    margin-bottom: 53px
+}
+
+.ytp-big-mode .caption-window.ytp-caption-window-bottom {
+    margin-bottom: 70px
+}
+
+
+.ytp-autohide .caption-window.ytp-caption-window-bottom,
+.ytp-hide-controls .caption-window.ytp-caption-window-bottom,
+.ytp-muted-autoplay .caption-window.ytp-caption-window-bottom {
+    margin-bottom: 0;
+    -webkit-transition: margin-bottom .1s cubic-bezier(.4,0,1,1),margin-top .1s cubic-bezier(.4,0,1,1);
+    transition: margin-bottom .1s cubic-bezier(.4,0,1,1),margin-top .1s cubic-bezier(.4,0,1,1)
+}
+
+
+.ytp-native-controls .caption-window.ytp-caption-window-bottom {
+    margin-bottom: 45px;
+    -webkit-transition: none;
+    transition: none
+}
+
+
+.ytp-ad-overlay-open
+--
+.ytp-ad-overlay-open .caption-window.ytp-caption-window-bottom {
+    margin-bottom: 151px
+}
+
+.ytp-embed.ytp-ad-overlay-open .caption-window.ytp-caption-window-bottom {
+    margin-bottom: 143px
+}
+
+.ytp-big-mode.ytp-ad-overlay-open .caption-window.ytp-caption-window-bottom {
+    margin-bottom: 160px
+}
+
+
+
+
+.html5-video-player .caption-window.ytp-dragging,
+.html5-video-player.ytp-ad-overlay-open .caption-window.ytp-dragging {
+    margin-top: 0;
+    margin-bottom: 0;
+    -webkit-transition: none;
+    transition: none;
+    cursor: move;
+    cursor: -webkit-grabbing;
+    cursor: grabbing
+}
+
+
+
+
+.ytp-caption-window-rollup.ytp-rollup-mode {
+    overflow: hidden
+}
+
+.caption-window svg,
+.caption-window .ytp-icon {
+    width: 48px;
+    height: 48px;
+    vertical-align: bottom;
+    display: inline-block;
+    max-width: 1em;
+    max-height: 1em
+}
+
+.ytp-embed .caption-window svg,
+.ytp-embed .caption-window .ytp-icon {
+    width: 40px;
+    height: 40px
+}
+
+.ytp-big-mode .caption-window svg {
+    width: 54px;
+    height: 54px
+}
+
+.ytp-caption-window-rollup.ytp-rollup-mode .captions-text {
+    -webkit-transition: -webkit-transform .433s cubic-bezier(0,0,.2,1);
+    transition: transform .433s cubic-bezier(0,0,.2,1),-webkit-transform .433s cubic-bezier(0,0,.2,1)
+}
+
+

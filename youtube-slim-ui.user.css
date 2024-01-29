@@ -26,7 +26,8 @@ Customize as preferred.
 */
 
 
-@-moz-document domain("youtube.com") {
+/* @-moz-document domain("youtube.com") { */
+@-moz-document url-prefix("https://www.youtube.com/watch") {
 
   /* Restore default 16px font-size. :root font-size is 10px */
   ytd-text-inline-expander,
@@ -52,83 +53,760 @@ Customize as preferred.
     transition: opacity 0.7s ease-out;
   }
 
+  /* Raise overflowing precision seekbar thumbnails above title and suggested videos */
+  #full-bleed-container {
+    z-index: 1;
+  }
 
 
-  /* Progressbar mouse capture area is bigger */
-  .ytp-progress-bar-padding {
-    /* 5x bigger */
-    --height---normal: 50px; /* 10x */
-    --height---hover: 70px; /* 14x */
-    --bottom: calc( 50% - var(--height---normal) / 2 );
-    --bottom: -15px;
-    height: var(--height---normal);
-    /* background-color: #ffffff0c; */
-    transition: background 0.2s;
+
+  /** Player controls and progressbar **/
+  .ytp-chrome-bottom {
+    --height--controls: 36px;
+    --height--controls--shrink: 4px;
+    --translateY--controls: calc( var(--height--controls) - ( 100% / 48 * 36 ) );
+    /* --translateY--controls: calc( (1px - 100cqh / 48 ) * 40 ); */
+    /* container-type: size; */
+    /* Layer behind subtitles */
+    z-index: 30;
+    /* Disable JS-calculated positioning */
+    width: unset !important;
+    /* height is overridden by JS when opening precision seekbar */
+    /* height: unset !important; */
+    /* Full width background */
+    inset-inline: 0 !important;
+    /* 12px margin for controls */
+    --padding-inline--controls: var(--ytd-margin-3x);
+    padding-inline: var(--padding-inline--controls);
+    /* Remove unnecessary 3px padding-top */
+    padding-top: unset;
+    /* Layout: progressbar above controls */
+    /* display: flex; */
+    /* flex-direction: column; */
+    /* Move controls above progressbar: reverse order */
+    /* flex-direction: column-reverse; */
   }
-  /* Progressbar mouse capture area is bigger once hovering */
-  .ytp-progress-bar-container:hover:not([aria-disabled=true]) .ytp-progress-bar-padding {
-    height: var(--height---hover);
-    background-color: #ffffff0c;
+  /* Position controls */
+  .html5-video-player:not(.ytp-player-minimized) .ytp-progress-bar-container {
+    /* bottom: var(--height--controls); */
+    bottom: calc( var(--height--controls) - var(--translateY--controls));
+    width: fit-content;
+    /* width: var(--width--progressbar); */
+    /* Center horizontally if JS restricts progressbar width - absolute positioning */
+    margin-inline: auto;
+    inset-inline: var(--padding-inline--controls);
+    /* Center horizontally if JS restricts progressbar width - relative positioning */
+    /* position: relative; */
+    align-self: center;
+    /* Layer above controls when overflowing */
+    z-index: 10;
+
+    /* Live videos have undefined (100%) progressbar length */
+    &:has( .ytp-chapter-hover-container[style*='width: 100%'] ) {
+      width: calc( 100% - 2 * var(--padding-inline--controls) );
+    }
   }
-  /* Progressbar mouse capture area is vertically centered */
-  .ytp-progress-bar-padding,
-  .ytp-progress-bar-container:hover:not([aria-disabled=true]) .ytp-progress-bar-padding {
-    bottom: var(--bottom);
+  .ytp-chrome-controls.ytp-chrome-controls {
+    position: absolute;
+    /* bottom: 0; */
+    bottom: calc( 0px - var(--translateY--controls) );
+    inset-inline: var(--ytd-margin-3x);;
+    /* Controls' height is decreased from 48px */
+    height: var(--height--controls);
+
+    /* Button width does not change in fullscreen .big-mode */
+    .ytp-button:not(.ytp-chapter-title) {
+      width: 48px;
+    }
+    /* Button rendering height is the original so it's not shrinking */
+    .ytp-volume-area,
+    .ytp-button {
+      height: 48px;
+    }
   }
-  /* Disable further increase of mouse capture area on the hovered chapter */
-  .ytp-drag .ytp-exp-chapter-hover-effect,
-  .ytp-progress-bar-container:hover:not([aria-disabled=true]) .ytp-exp-chapter-hover-effect,
-  .ytp-exp-chapter-hover-container:hover,
-  .ytp-progress-bar-container:hover:not([aria-disabled=true]).ytp-timed-markers-enabled .ytp-progress-list {
-    -webkit-transform: unset;
-    transform: unset;
-    -webkit-transition: unset;
+  /* Buttons and chapter titles vertically centered to clip the empty space on the top and bottom */
+  .ytp-chrome-controls > *,
+  .ytp-chapter-container {
+    display: flex;
+    align-items: center;
+  }
+  /* Move timestamp to right side */
+  .ytp-time-display {
+    margin-left: auto;
+    order: 2;
+    /* Timestamp font is bigger */
+    font-size: 1.8rem;
+  }
+
+
+  /* Compress controls when inactive */
+  .ytp-progress-bar-container,
+  .ytp-chrome-controls {
+    transition: transform 50ms ease-in-out;
+  }
+  /*, /* TEMP */
+  .ytp-chrome-bottom:not( :focus-within, :hover ) {
+    .ytp-progress-bar-container {
+      transform: translateY(var(--height--controls--shrink));
+    }
+    .ytp-chrome-controls {
+      transform: translateY(calc( var(--height--controls--shrink) / 2 ));
+    }
+  }
+
+  /* Slide controls down when precision seekbar is opened */
+  .ytp-progress-bar-container,
+  .ytp-chrome-controls {
+    .html5-video-player:is( .ytp-fine-scrubbing-enable, .seeking-mode ) & {
+      /* transform: translateY(var(--translateY--controls)); */
+      transition: unset;
+    }
+  }
+
+
+  /* Controls have translucent background */
+  .ytp-chrome-bottom {
+    background-image: linear-gradient(to top, rgb(0 0 0 / 30%), rgb(0 0 0 / 10%) var(--height--controls), rgb(0 0 0 / 0%));
+    /* Timestamp and chapter title has text shadow */
+    text-shadow: 1px 1px 2px black;
+  }
+  /* Buttons have a shadow */
+  .ytp-chrome-controls .ytp-button {
+    filter: drop-shadow(1px 1px 2px #000a);
+  }
+  /* Disable player controls' shadow */
+  .ytp-gradient-bottom {
+    display: none;
+  }
+
+  /* Fade out player controls */
+  .ytp-chrome-bottom.ytp-chrome-bottom {
+    opacity: 0;
+    transition: opacity 0.5s;
+  }
+  /* Disable hiding of player buttons and disable fade-out on inactivity */
+  /* .ytp-autohide = .playing-mode and mouse didn't move for 3 seconds) */
+  /* #movie_player for precedence */
+  #movie_player .ytp-button {
+    opacity: unset;
     transition: unset;
   }
+  /* Show controls when active */
+  .html5-video-player:is( .paused-mode, .playing-mode:not(.ytp-autohide) ),
+  .html5-video-player:has( .ytp-chrome-bottom:is( :focus-within, :hover ) ) {
+    .ytp-chrome-bottom {
+      opacity: 1;
+    }
+    /* Move subtitles up (.caption-window) */
+    .ytp-caption-window-top {
+      /* margin-top: 0; */
+    }
+    .ytp-caption-window-bottom {
+      margin-bottom: 60px;
+    }
+  }
 
 
-  /* Progress bar thickness */
-  .ytp-progress-bar-container {
-    --height--progress-bar: 10px; /* 2x */
-    --height--progress-bar: 5px;  /* original */
+  /** Seekbar / progressbar **/
+
+  /* Position progressbar components using normal box layout */
+  .ytp-progress-bar-container.ytp-progress-bar-container {
+    /* Calculate height based on childrens: heatmap, progressbar, seekbar thumbnails */
+    height: unset;
+  }
+  /* Position heat map above progressbar and add to container height */
+  .ytp-heat-map-container,
+  /* Position precision seekbar thumbnails under progressbar and add to container height */
+  .ytp-fine-scrubbing-container,
+  /* Set progressbar container height */
+  .ytp-progress-bar {
+    position: relative;
+    /* Disable translateY positioning by JS */
+    transform: unset !important;
+  }
+  #movie_player .ytp-heat-map-container {
+    /* The 5px for progressbar is substituted with relative positioning */
+    bottom: unset;
+  }
+  .ytp-heat-map-chapter {
+    padding-bottom: 1px;
+    transition: unset !important;
+  }
+  .ytp-heat-map-chapter.ytp-heatmap-hover {
+    bottom: 0;
+    transform: translateY(-2px);
+  }
+
+  /* Progressbar thickness */
+  .ytp-progress-bar {
+    --height--progress-bar: 5px;
+    --height--progress-bar--hover: 9px;
     height: var(--height--progress-bar);
   }
-  /* Position dot sized relative to progress bar */
-  .ytp-scrubber-container {
-    --size: calc( var(--height--progress-bar) * 2 + 3px );
-    --size: calc( var(--height--progress-bar) * 1.5 + 5.5px );
-    --size: calc( var(--height--progress-bar) + 8px ); /* original: 13px, 2x: 18px */
+  /* Progressbar thickness increased (normal: 3px->5px, hovered: 5px->5px) */
+  .ytp-timed-markers-container,
+  .ytp-progress-bar-container:not(.ytp-timed-markers-enabled) .ytp-progress-list {
+    /* Disable scaleY(.6)=3px when not hovered. #movie_player for precedence */
+    transform: none;
+    transition: none;
+  }
+  .ytp-chapter-hover-container {
+    /* width: 100% !important; */
+    /* TODO
+    --ytd-player-width: max( var(--ytd-watch-flexy-min-player-width), var(--ytd-watch-flexy-max-player-width) );
+    --width: calc(var(--ytd-player-width) - 24px);
+    --scale: calc( var(--width--player) / var(--ytd-player-width) );
+    transform: scaleX( var(--scale) );
+    transform-origin: bottom left;
+    */
+  }
+
+
+  .ytp-chapters-container {
+    display: flex;
+    align-items: center;
+  }
+  /* .ytp-chapter-hover-container is NOT the place to increase progressbar thickness on the hovered chapter */
+  .ytp-drag .ytp-exp-chapter-hover-effect,
+  .ytp-exp-chapter-hover-container:hover,
+  .ytp-progress-bar-container:hover:not([aria-disabled=true]) .ytp-exp-chapter-hover-effect,
+  .ytp-timed-markers-enabled.ytp-progress-bar-container:hover:not([aria-disabled=true]) .ytp-progress-list {
+    transition: unset;
+    transform: unset;
+  }
+  /* .ytp-progress-list IS the place to increase progressbar thickness on the hovered chapter */
+  .ytp-drag .ytp-exp-chapter-hover-effect,
+  .ytp-exp-chapter-hover-container:hover,
+  .ytp-progress-bar-container:hover:not([aria-disabled=true]) .ytp-exp-chapter-hover-effect,
+  .ytp-timed-markers-enabled.ytp-progress-bar-container:hover:not([aria-disabled=true]) {
+    .ytp-progress-list {
+      /* transform: scaleY(calc( var(--height--progress-bar--hover) / var(--height--progress-bar) )); */
+      height: var(--height--progress-bar--hover);
+      bottom: calc( (var(--height--progress-bar--hover) - var(--height--progress-bar)) / 2 );
+      /* bottom: 2px; */
+    }
+  }
+  .ytp-progress-list,
+  .ytp-timed-markers-container {
+    /* transition: transform .1s ease-out; */
+    /* scaleY from bottom up when hovered */
+    /* transform-origin: bottom left; */
+  }
+
+  /* Position dot sized relative to progressbar (original: 13px, hovered: 20px) */
+  .ytp-scrubber-container.ytp-scrubber-container {
+    --size: calc( var(--height--progress-bar) + 8px );
     height: var(--size);
     width: var(--size);
     /* Position dot is vertically centered */
     top: calc( 50% - var(--size) / 2 );
     left: calc( 0% - var(--size) / 2 );
   }
-  .ytp-scrubber-button {
+  .ytp-scrubber-button.ytp-scrubber-button {
     height: 100%;
     width: 100%;
     border-radius: 50%;
   }
-
-
-
-  /* Seekbar gradient shadow is only as high as the seekbar instead of darkening the bottom 1/3 of the video */
-  /* Copied values from class .ytp-chrome-bottom in www-player.css */
-  .ytp-chrome-bottom {
-    background-image: linear-gradient(to top, rgb(0 0 0 / 70%), rgb(0 0 0 / 0%));
-    padding-top: 20px;
-    left: 0 !important;
-    width: 100% !important;
+  .ytp-progress-bar-container:hover:not([aria-disabled=true]) .ytp-scrubber-button.ytp-scrubber-button-hover,
+  .ytp-drag .ytp-scrubber-button.ytp-scrubber-button-hover {
+    /* Bit smaller dot */
+    transform: scale(1.4);
   }
-  .ytp-chrome-bottom > * {
-    margin-inline: 12px;
+
+
+  /* Curvy progressbars */
+  .ytp-chapter-hover-container:first-child .ytp-progress-list {
+    /* Radius on left edge */
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    overflow: hidden;
   }
-  .ytp-gradient-bottom {
+  .ytp-chapter-hover-container:last-child .ytp-progress-list {
+    /* Radius on right edge */
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    overflow: hidden;
+  }
+
+  /* Progressbar color */
+  .ytp-swatch-background-color {
+    background-color: #b2d;
+    background-color: royalblue;
+    background-color: #46c;
+    background-color: #228;
+  }
+  /* Progressbar transparency */
+  .ytp-play-progress {
+    opacity: 70%;
+  }
+
+
+  /* Progressbar mouse capture area is much bigger. #movie_player for precedence */
+  .ytp-progress-bar {
+    --top--capture-area: -40px;
+    --bottom--capture-area: -5px;
+  }
+  .ytp-progress-bar::before {
+    /* background-color: #f706; */
+    top: var(--top--capture-area);
+    bottom: var(--bottom--capture-area);
+    inset-inline: 0;
+    position: absolute;
+    content: '';
+  }
+  #movie_player .ytp-progress-bar-padding {
+    top: var(--top--capture-area);
+    bottom: var(--bottom--capture-area);
+    /* Avoid precedence battle induced size oscillation caused by: */
+    /* .ytp-chapter-hover-container:hover:not([aria-disabled=true]) .ytp-progress-bar-padding */
+    height: unset !important;
+    /* Use inset instead of width to override left, right below for buttons */
+    width: unset;
+  }
+  .ytp-progress-bar-padding {
+    inset-inline: 0;
+    /* transition: background 0.2s; */
+    /* TEST */
+    /* background-color: #f706 !important; */
+    /* visibility: hidden; */
+  }
+  .ytp-progress-bar-container:not([aria-disabled=true]):hover .ytp-progress-bar-padding {
+    /* Bigger when hovered */
+    /* top: -45px; */
+    /* Highlight when hovered */
+    /* background-color: #ffffff0c; */
+    background-color: #ffffff18;
+  }
+  /* Leave space for buttons when precision seekbar (.ytp-fine-scrubbing-container) is active */
+  .ytp-fine-scrubbing-enable {
+    .ytp-progress-bar::before {
+      inset-inline: 30px 35px;
+    }
+    .ytp-chapter-hover-container:first-child .ytp-progress-bar-padding {
+      /* Button on left */
+      left: 30px;
+    }
+    .ytp-chapter-hover-container:last-child .ytp-progress-bar-padding {
+      /* Button on right */
+      right: 35px;
+    }
+  }
+
+
+  /* Precision seekbar thumbnails */
+  .ytp-fine-scrubbing-container,
+  .ytp-fine-scrubbing {
+    /* Clip thumbnail scroller */
+    /* overflow: hidden; */  /* Hides the seekbar buttons and timestamp */
+  }
+  .ytp-fine-scrubbing {
+    /* Just for completeness */
+    height: 100%;
+  }
+  .ytp-fine-scrubbing-enable .ytp-chrome-controls {
+    /* TEMP for development */
+    /* display: flex; */
+    visibility: hidden;
+  }
+
+  /* Precision seeking preview */
+  .ytp-storyboard-framepreview-img {
+    /* Center horizontally, override JS calculation */
+    margin: auto !important;
+  }
+
+
+
+  /* Subtitles occupy only the space necessary for text to capture mouse only over text */
+  .caption-window {
+    /* z-index: unset; - breaks .ytp-rollup-mode, captions are invisible (behind video) */
+    width: fit-content !important;
+    /* Don't animate move */
+    transition: unset !important;
+  }
+  /* Subtitle background is only on .caption-window where 'W' key changes the opacity */
+  .ytp-caption-segment {
+    background-color: unset !important;
+  }
+
+
+
+  /* Subtitle doesn't move up on mouse activity */
+  /* #movie_player:not(.ytp-fine-scrubbing-enable) .caption-window { */
+  #movie_player:not(.seeking-mode) .caption-window {
+    /* margin-bottom: unset; */
+  }
+  /* Subtitle moves up when precision seekbar is open */
+  .caption-window.ytp-caption-window-bottom {
+    .ytp-fine-scrubbing-enable.ytp-fine-scrubbing-enable & {
+      margin-bottom: 100px;
+    }
+    .ytp-fine-scrubbing-enable.ytp-ad-overlay-open & {
+      /* margin-bottom: 200px */
+    }
+    .ytp-fine-scrubbing-enable.ytp-big-mode & {
+      /* margin-bottom: 155px */
+    }
+  }
+
+
+
+  /** Page relayout **/
+
+  /* Page content */
+  #columns#columns {
+    --margin--columns: var(--ytd-margin-6x);
+    --gap--columns: var(--ytd-margin-6x);
+    /* margin-inline: var(--margin--columns); */
+    /* column-gap: var(--gap--columns); */
+    /* width: fit-content; */
+    max-width: unset;
+    justify-content: center;
+
+    & > * {
+      padding-top: unset;
+      margin-block: unset;
+    }
+
+    /* Margin between top bar and player in basic mode */
+    margin-top: var(--ytd-margin-base);
+  }
+  .ytd-page-manager[full-bleed-player] #columns#columns {
+    margin-top: var(--ytd-margin-6x);
+  }
+  /* Column 1 - #primary: video + description + comments */
+  #primary#primary {
+    /* Dynamic layout */
+    max-width: unset;
+    flex: unset;
+    --max-width--comments: 1000px;
+    --max-width--comments: 1100px;
+    --max-width--description: calc( 2 * var(--max-width--comments) );
+    --width-base--primary: calc( 100vw - var(--ytd-watch-flexy-sidebar-width) - 2 * var(--margin--columns) - var(--gap--columns) );
+    --width--comments: min( var(--max-width--comments) , var(--width-base--primary) );
+    --min-width--player: var(--width--comments);
+    --max-width--player: min( var(--ytd-watch-flexy-max-player-width) * 2.5 , var(--ytd-watch-flexy-max-player-height) * 2.5 );
+    --width--player: clamp( var(--min-width--player) , var(--width-base--primary) , var(--max-width--player) );
+    --width--description: clamp( var(--width--comments) , var(--width--player) , var(--max-width--description) );
+  }
+  /* Margin between player and description, comments */
+  .ytd-page-manager[full-bleed-player] #full-bleed-container,
+  .ytd-page-manager[default-layout] #player {
+    margin-bottom: var(--ytd-margin-2x);
+  }
+  #clarify-box#clarify-box {
+    margin-top: var(--ytd-margin-2x);
+  }
+  #clarify-box:empty {
     display: none;
   }
+  #below ytd-watch-metadata {
+    /* margin-inline: var(--ytd-margin-10x); */
+    --margin--description: 0px;
+    width: calc( var(--width--description) - 2 * var(--margin--description) );
+    margin-inline: auto;
+    /* margin + line-height lines up text with secondary column: yt-chip-cloud-renderer:not([no-top-margin]) yt-chip-cloud-chip-renderer.yt-chip-cloud-renderer */
+    margin-top: var(--ytd-margin-base);
+    margin-top: 0px;
+
+    .ytd-page-manager[default-layout] & {
+      --margin--description: var(--gap--columns);
+    }
+  }
+  #below #comments {
+    width: var(--width--comments);
+    max-width: var(--max-width--comments);
+    margin-inline: auto;
+  }
+  /* Column 2 - #secondary: suggested videos */
+  yt-chip-cloud-renderer:not([no-top-margin]) yt-chip-cloud-chip-renderer.yt-chip-cloud-renderer {
+    margin-top: 0px;
+  }
 
 
 
+  /** Video sizing with responsive css **/
+
+  /* Level 9: #primary-inner */
+  #primary-inner {
+    display: flex;
+    flex-direction: column;
+    width: fit-content;
+    max-width: 100%;
+    align-items: center;
+  }
+  /* Level 8: Player frame size calculation */
+  ytd-watch-flexy[flexy] #player {
+    /* Height for video title and channel */
+    --ytd-watch-flexy-space-below-player: 28px;
+    --ytd-watch-flexy-space-below-player: calc(28px + 55px);
+    /* height calculated from width and aspect-ratio */
+    aspect-ratio: var(--ytd-watch-flexy-width-ratio) / var(--ytd-watch-flexy-height-ratio);
+    /* max-height calculated from viewport - header - space below */
+    width: var(--width--player);
+    --height--for-aspect-ratio: calc( var(--width--player) / (var(--ytd-watch-flexy-width-ratio) / var(--ytd-watch-flexy-height-ratio)) );
+    --max-height: calc( 100vh - var(--ytd-watch-flexy-masthead-height) - var(--ytd-margin-3x) - var(--ytd-watch-flexy-space-below-player) );
+    --min-height: min( 0.5 * var(--width--comments) / ( var(--ytd-watch-flexy-width-ratio) / var(--ytd-watch-flexy-height-ratio) ) , var(--max-height) );
+    height: clamp( var(--min-height) , var(--height--for-aspect-ratio) , var(--max-height) );
+    /* height: min( max( var(--min-height) , var(--height--for-aspect-ratio) ), var(--max-height) ); */
+    /* clamp() is not correct for this, because clamp prefers the bigger result in case of conflict: if (min > max) then clamp=min
+    /* min-height: min( var(--min-height), var(--max-height) ); */
+    /* max-height: var(--max-height); */
+    /* max-height: var(--ytd-watch-flexy-max-player-height); */
+  }
+
+  /* Level 7: player-container-outer */
+  ytd-watch-flexy[flexy] #player-container-outer.ytd-watch-flexy {
+    min-width: unset;
+    max-width: unset;
+    margin: unset;
+  }
+
+  /* Level 6: player-container-inner */
+  ytd-watch-flexy[flexy] #player-container-inner.ytd-watch-flexy {
+    padding-top: unset;
+  }
+  /* Level 5: player-container */
+  ytd-watch-flexy[flexy] #player-container.ytd-watch-flexy {
+    position: unset;
+    /* Get container size for video fit calculation */
+    container-type: size;
+  }
+  /* Level 3: container */
+  #container.ytd-player {
+  }
+  /* Level 2: video-player */
+  .html5-video-player {
+    --max-width--video: calc( 100cqh * var(--ytd-watch-flexy-width-ratio) / var(--ytd-watch-flexy-height-ratio) );
+    --max-height--video: calc( 100cqw / (var(--ytd-watch-flexy-width-ratio) / var(--ytd-watch-flexy-height-ratio)) );
+    --width--progressbar: min( 100cqw - 2 * var(--padding-inline--controls), var(--max-width--video) );
+  }
+  /* Level 1: video-container */
+  .html5-video-container {
+    /* Center child vertically too */
+    display: flex;
+  }
+
+  /* Level 7,6,5,1: height inherited all the way from #player-container-outer */
+  /* ytd-watch-flexy[flexy] #player-container-outer.ytd-watch-flexy, */
+  ytd-watch-flexy[flexy] #player-container-outer.ytd-watch-flexy,
+  ytd-watch-flexy[flexy] #player-container-inner.ytd-watch-flexy,
+  ytd-watch-flexy[flexy] #player-container.ytd-watch-flexy,
+  .html5-video-container {
+    height: 100%;
+    /* width inherited also due to block layout */
+    /* width: 100%; */
+  }
+
+  /* Level 0: video */
+  .html5-main-video.html5-main-video {
+    /* Can affect parent's size */
+    position: static;
+    /* Center vertically and horizontally */
+    margin: auto;
+    /* Don't clip video if there is a miscalculation */
+    object-fit: contain;
+    /* Use as much space as available */
+    width: 100% !important;
+    height: 100% !important;
+    /* Calculate max sizes that fit based on video aspect ratio and parent container size */
+    max-width: var(--max-width--video);
+    max-height: var(--max-height--video);
+  }
+
+  /* Add permanent box-shadow under player */
+  /* #player-container { */
+  #movie_player {
+    box-shadow: 0 0.5em 3em 0px rgba(0,0,0,0.7);
+    border-radius: 12px;
+    /* TEMP for development */
+    /* overflow: visible; */
+  }
+  /* #movie_player, */
+  #ytd-player#ytd-player {
+    overflow: visible;
+  }
+  ytd-channel-video-player-renderer {
+    overflow: visible;
+  }
+
+
+
+  /* Hide controls while loading */
+  #player.skeleton {
+    & .ytp-large-play-button,
+    & .html5-video-player > *:not(.ytp-cued-thumbnail-overlay) {
+      display: none;
+    }
+  }
+  #content.ytd-app:not( :has(#movie_player), :has(> ytd-browse) ) #masthead {
+    visibility: hidden;
+  }
+  /* Disable loading skeleton */
+  #watch-page-skeleton {
+    display: none;
+  }
+  ytd-masthead.shell {
+    display: none;
+  }
+  body {
+    overflow-y: scroll;
+    /* Allocate space for the scrollbar to avoid layout change (reflow) when content is loaded below the first page */
+    scrollbar-gutter: stable;
+  }
+  /* TODO: skeleton player positioning with secondary column width
+  ytd-watch-flexy[flexy] #secondary.ytd-watch-flexy {
+    width: var(--ytd-watch-flexy-sidebar-width);
+    min-width: var(--ytd-watch-flexy-sidebar-min-width);
+  }
+  */
+
+
+
+  /* Fade in whole page */
+  ytd-app {
+    opacity: 0;
+    filter: blur(10px);
+    --duration--fade: 0.5s;
+    --duration--fade: 1s;
+    transition: filter var(--duration--fade), opacity var(--duration--fade);
+    transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    transition-timing-function: ease-out;
+  }
+  ytd-app:has( .ytp-cued-thumbnail-overlay-image[style*=background-image] ) {
+    /* Unblur after video thumbnail is loaded */
+    opacity: 1;
+    filter: blur(0px);
+  }
+
+
+  /* Background color */
+  :root {
+    /* #0f0f0f */
+    --bgcolor--video: var(--yt-spec-base-background);
+    --bgcolor--video: #111;
+    --bgcolor--video: #080808;
+  }
+
+  /* Fade from video thumbnail to video on first play */
+  .html5-video-player .ytp-cued-thumbnail-overlay {
+    transition: opacity 1s, visibility 1s;
+    /* Don't hide by .ytp-cued-thumbnail-overlay[aria-hidden=true] set by JS */
+    opacity: 1;
+    /* Layer above video */
+    z-index: 50;
+
+    &:has( .ytp-cued-thumbnail-overlay-image[style*=background-image] ) {
+      background-color: var(--bgcolor--video);
+      /* Keep displayed for animation */
+      display: unset !important;
+    }
+  }
+  .html5-video-player .html5-video-container {
+    transition: opacity 1s;
+    opacity: 0;
+  }
+  .html5-video-container,
+  .html5-video-player .ytp-cued-thumbnail-overlay {
+    transition-timing-function: cubic-bezier(0,0,.2,1), linear;
+  }
+  .html5-video-player:is( .playing-mode, .paused-mode, .ended-mode ):not(.unstarted-mode) {
+    .html5-video-container {
+      opacity: 1;
+    }
+    .ytp-cued-thumbnail-overlay {
+      opacity: 0;
+      visibility: hidden;
+    }
+  }
+
+
+  /* Video thumbnail is centered when player is wider or taller */
+  .ytp-cued-thumbnail-overlay-image {
+    background-size: contain;
+  }
+  /* Vertical video's thumbnail can overflow on the sides */
+  .ytd-page-manager[is-vertical-video_] .ytp-cued-thumbnail-overlay-image {
+    /* Make container wider */
+    width: 300%;
+    /* Center container */
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+
+  /* Animate play button when hovered */
+  .ytp-large-play-button {
+    transition: all 0.5s;
+    /* filter: drop-shadow(0px 0px 3px #212121); */
+    filter: drop-shadow(0px 0px 3px #700);
+  }
+  .ytp-large-play-button:hover {
+    transform: scale(1.1);
+    filter: drop-shadow(0px 0px 3px red);
+  }
+  .ytp-large-play-button .ytp-large-play-button-bg {
+    fill: #700;
+    fill-opacity: 0.7;
+    transition: fill 0.5s ease-in-out, fill-opacity 0.5s ease-in-out !important;
+  }
+
+
+
+  /* Move description's "Show less" button up: to the same position and size as the collapsed button that expands it */
+  ytd-text-inline-expander {
+    contain: unset;
+    overflow: visible;
+  }
+  #collapse.ytd-text-inline-expander {
+    color: mediumpurple;
+    font-size: 18px;
+    position: absolute;
+    height: 30px;
+    top: -30px;
+    /* left: -10px; */
+    left: 50%;
+    right: -10px;
+    margin-top: unset;
+    padding-top: 6px;
+    /* padding-left: 50%; */
+    align-items: start;
+    /* justify-content: end; */
+
+    &:focus-within,
+    &:hover {
+      background-color: rgb( from mediumpurple r g b / 20% );
+      background-color: rgb( 147 112 219 / 20% );
+    }
+  }
+
+
+
+  /* Volume percentage (when changing) is round */
+  .ytp-bezel-text {
+    box-shadow: 0 0 10px 4px rgb(0 0 0/50%);
+    border-radius: 2em;
+    /* border-radius: 100%; */
+    padding: 10px 14px;
+    line-height: 2em;
+  }
+
+
+
+  /* Enhancer for Youtube addon's style fixes */
+  .ytd-watch-flexy:not(#engagement-panel-scrim) {
+    background-color: unset !important;
+  }
+  #columns#columns {
+    background-color: var(--main-background) !important;
+  }
+
+}
+
+
+
+
+@-moz-document domain("youtube.com") {
   /* Video suggestion cards subtly pop out */
   ytd-rich-grid-media, /* Main page, Channel Videos page, Channel Live page - videos */
   ytd-rich-grid-slim-media, /* Main page, Channel Shorts page - shorts */
@@ -167,219 +845,6 @@ Customize as preferred.
   #details.ytd-rich-grid-media {
     margin: 5px;
     margin-top: 0px;
-  }
-
-
-
-  /** No wasted margins around content: page relayout **/
-
-  /* Page content */
-  #columns#columns {
-    max-width: unset;
-    /* width: fit-content; */
-    --margin--columns: var(--ytd-margin-12x);
-    --gap--columns: var(--ytd-margin-10x);
-    /* margin-inline: var(--margin--columns); */
-    column-gap: var(--gap--columns);
-    justify-content: center;
-
-    & > * {
-      padding: unset;
-      margin: unset;
-    }
-  }
-  /* Column 1 - #primary: video + description + comments */
-  #primary#primary {
-    max-width: unset;
-    flex: unset;
-    --max-width--comments: 1000px;
-    --max-width--comments: 1100px;
-    --max-width--description: calc( 2 * var(--max-width--comments) );
-    --width-base--primary: calc( 100vw - var(--ytd-watch-flexy-sidebar-width) - 2 * var(--margin--columns) - var(--gap--columns) );
-    --width--comments: min( var(--max-width--comments) , var(--width-base--primary) );
-    --min-width--player: var(--width--comments);
-    --max-width--player: min( var(--ytd-watch-flexy-max-player-width) * 2.5 , var(--ytd-watch-flexy-max-player-height) * 2.5 );
-    --width--player: clamp( var(--min-width--player) , var(--width-base--primary) , var(--max-width--player) );
-    --width--description: clamp( var(--width--comments) , var(--width--player) , var(--max-width--description) );
-  }
-  /* Below video: description + comments */
-  #below {
-    /* align-self: end; */
-    /* width: var(--width--comments); */
-  }
-  #below ytd-watch-metadata {
-    /* margin-inline: var(--ytd-margin-10x); */
-    --margin--description: 0px;
-    width: calc( var(--width--description) - 2 * var(--margin--description) );
-    margin: auto;
-
-    .ytd-page-manager[default-layout] & {
-      --margin--description: var(--gap--columns);
-    }
-  }
-  #below #comments {
-    width: var(--width--comments);
-    margin: auto;
-  }
-  /* Column 2 - #secondary: suggested videos */
-
-
-
-  /** Video sizing with responsive css **/
-
-  /* Level 9: #primary-inner */
-  #primary-inner {
-    display: flex;
-    flex-direction: column;
-    width: fit-content;
-    max-width: 100%;
-    align-items: center;
-  }
-  /* Level 8: Player frame size calculation */
-  ytd-watch-flexy[flexy] #player {
-    /* margin same as secondary column: yt-chip-cloud-renderer:not([no-top-margin]) yt-chip-cloud-chip-renderer.yt-chip-cloud-renderer */
-    margin-top: var(--ytd-margin-2x);
-    /* Height for video title and channel */
-    --ytd-watch-flexy-space-below-player: 28px;
-    --ytd-watch-flexy-space-below-player: calc(28px + 55px);
-    /* height calculated from width and aspect-ratio */
-    aspect-ratio: var(--ytd-watch-flexy-width-ratio) / var(--ytd-watch-flexy-height-ratio);
-    /* max-height calculated from viewport - header - space below */
-    width: var(--width--player);
-    --height--for-aspect-ratio: calc( var(--width--player) / (var(--ytd-watch-flexy-width-ratio) / var(--ytd-watch-flexy-height-ratio)) );
-    --max-height: calc( 100vh - var(--ytd-watch-flexy-masthead-height) - var(--ytd-margin-3x) - var(--ytd-watch-flexy-space-below-player) );
-    --min-height: min( 0.5 * var(--width--comments) / ( var(--ytd-watch-flexy-width-ratio) / var(--ytd-watch-flexy-height-ratio) ) , var(--max-height) );
-    height: clamp( var(--min-height) , var(--height--for-aspect-ratio) , var(--max-height) );
-    /* height: min( max( var(--min-height) , var(--height--for-aspect-ratio) ), var(--max-height) ); */
-    /* clamp() is not correct for this, because clamp prefers the bigger result in case of conflict: if (min > max) then clamp=min
-    /* min-height: min( var(--min-height), var(--max-height) ); */
-    /* max-height: var(--max-height); */
-    /* max-height: var(--ytd-watch-flexy-max-player-height); */
-  }
-
-  /* Level 7: player-container-outer */
-  ytd-watch-flexy[flexy] #player-container-outer.ytd-watch-flexy {
-    min-width: unset;
-    max-width: unset;
-    margin: unset;
-  }
-
-  /* Level 6: player-container-inner */
-  ytd-watch-flexy[flexy] #player-container-inner.ytd-watch-flexy {
-    padding-top: unset;
-  }
-  /* Level 5: player-container */
-  ytd-watch-flexy[flexy] #player-container.ytd-watch-flexy {
-    position: unset;
-  }
-  /* Level 1: video-container */
-  .html5-video-container {
-    /* Center child vertically too */
-    display: flex;
-    /* Get container size for video fit calculation */
-    container-type: size;
-  }
-
-  /* Level 7,6,5,1: height inherited all the way from #player-container-outer */
-  /* ytd-watch-flexy[flexy] #player-container-outer.ytd-watch-flexy, */
-  ytd-watch-flexy[flexy] #player-container-outer.ytd-watch-flexy,
-  ytd-watch-flexy[flexy] #player-container-inner.ytd-watch-flexy,
-  ytd-watch-flexy[flexy] #player-container.ytd-watch-flexy,
-  .html5-video-container {
-    height: 100%;
-    /* width inherited also due to block layout */
-    /* width: 100%; */
-  }
-
-  /* Level 0: video */
-  .html5-main-video.html5-main-video {
-    /* Can affect parent's size */
-    position: static;
-    /* Center vertically and horizontally */
-    margin: auto;
-    /* Don't clip video if there is a miscalculation */
-    object-fit: contain;
-    /* Use as much space as available */
-    width: 100% !important;
-    height: 100% !important;
-    /* Calculate max sizes that fit based on video aspect ratio and parent container size */
-    max-width: calc( 100cqh * var(--ytd-watch-flexy-width-ratio) / var(--ytd-watch-flexy-height-ratio) );
-    max-height: calc( 100cqw / (var(--ytd-watch-flexy-width-ratio) / var(--ytd-watch-flexy-height-ratio)) );
-  }
-
-
-
-  /* Hide controls while loading */
-  #player.skeleton {
-    & .ytp-large-play-button,
-    & .html5-video-player > *:not(.ytp-cued-thumbnail-overlay) {
-      display: none;
-    }
-  }
-  #masthead {
-    visibility: hidden;
-  }
-  #content.ytd-app:is( :has(#movie_player) , :has(> ytd-browse) ) #masthead {
-    visibility: unset;
-  }
-  /* Disable loading skeleton */
-  #watch-page-skeleton {
-    display: none;
-  }
-  ytd-masthead.shell {
-    display: none;
-  }
-  body {
-    overflow-y: scroll;
-  }
-
-
-  /* Move description's "Show less" button up: to the same position and size as the collapsed button that expands it */
-  ytd-text-inline-expander {
-    contain: unset;
-    overflow: visible;
-  }
-  #collapse.ytd-text-inline-expander {
-    color: mediumpurple;
-    font-size: 18px;
-    position: absolute;
-    height: 30px;
-    top: -30px;
-    /* left: -10px; */
-    left: 50%;
-    right: -10px;
-    margin-top: unset;
-    padding-top: 6px;
-    /* padding-left: 50%; */
-    align-items: start;
-    /* justify-content: end; */
-
-    &:focus-within,
-    &:hover {
-      background-color: rgb( from mediumpurple r g b / 20% );
-      background-color: rgb( 147 112 219 / 20% );
-    }
-  }
-
-
-
-  /* Caption background is less transparent */
-  .ytp-caption-segment {
-    background-color: rgba(8, 8, 8, 0.5) !important;
-  }
-  /* Captions don't move up on mouse activity */
-  #movie_player .caption-window {
-    margin-bottom: unset;
-  }
-
-
-
-  /* Enhancer for Youtube addon's style fixes */
-  .ytd-watch-flexy:not(#engagement-panel-scrim) {
-    background-color: unset !important;
-  }
-  #columns#columns {
-    background-color: var(--main-background) !important;
   }
 
 }

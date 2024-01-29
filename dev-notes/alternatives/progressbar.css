@@ -1,0 +1,15 @@
+  /* Curvy progressbars */
+  .ytp-chapter-hover-container:first-child .ytp-progress-list {
+    /* Radius on left edge */
+    border-radius: 5px 0 0 5px;
+    overflow: hidden;
+  }
+  .ytp-chapter-hover-container:last-child .ytp-progress-list {
+    /* Radius on right edge */
+    border-radius: 0 5px 5px 0;
+    overflow: hidden;
+  }
+  .ytp-chapter-hover-container:only-child .ytp-progress-list {
+    /* Radius on both ends */
+    border-radius: 5px;
+  }

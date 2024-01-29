@@ -1,3 +1,27 @@
+  /* Fade in thumbnail */
+  .ytp-cued-thumbnail-overlay-image {
+    background-color: var(--bgcolor--video);
+    /* Animate image sharpness and opacity on load */
+    filter: blur(100px);
+    opacity: 0;
+    transition: filter 2s ease-in-out, opacity 2s ease-in-out;
+
+    @starting-style {
+      filter: blur(100px);
+      opacity: 0;
+    }
+    &[style*=background-image] {
+      filter: blur(0px);
+      opacity: 1;
+    }
+    #content.ytd-app & {
+    }
+  }
+
+
+
+
+
   .ytp-cued-thumbnail-overlay-image {
     /* For visibility: collapse on child */
     display: flex;

@@ -27,3 +27,16 @@ Hiding .ytp-gradient-bottom and adding a background to .ytp-chrome-bottom is mor
 }
 
 
+
+/* Fade in player controls */
+.ytp-progress-bar-container,
+.ytp-chrome-controls {
+  opacity: 0;
+  transition: opacity 0.5s;
+
+  /* &:is( :focus-within, :hover ), */
+  .html5-video-player:is( .paused-mode, .playing-mode:not(.ytp-autohide) ) &,
+  .ytp-chrome-bottom:is( :focus-within, :hover ) & {
+    opacity: 1;
+  }
+}

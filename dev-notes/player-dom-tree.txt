@@ -86,3 +86,19 @@ title
 
 
 
+subtitles
+--
+#ytp-caption-window-container.ytp-caption-window-container
+> div#caption-window-1.caption-window.ytp-caption-window-bottom.ytp-caption-window-rollup
+  - style="touch-action: none; text-align: left; overflow: hidden; left: 62.6429%; width: 420px; height: 38px; margin-left: -210px; bottom: 2%;"
+  -> pointer-events: none
+> span.captions-text
+  - style="overflow-wrap: normal;display: block;"
+  -> transform -> z-index on parent
+> span.caption-visual-line
+  - style="display: block;"
+> span.ytp-caption-segment
+  - style="display: inline-block; white-space: pre-wrap; background: rgba(8, 8, 8, 0.75); font-size: 16px; color: rgb(255, 255, 255); fill: rgb(255, 255, 255); font-family: &quot;YouTube Noto&quot;, Roboto, &quot;Arial Unicode Ms&quot;, Arial, Helvetica, Verdana, &quot;PT Sans Caption&quot;, sans-serif;"
+  -> pointer-events: auto
+
+
