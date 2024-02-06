@@ -567,6 +567,15 @@ Customize as preferred.
       --margin--description: var(--gap--columns);
     }
   }
+  /* Video title is centered */
+  #above-the-fold #title > h1 {
+    text-align: center;
+
+    /* When SponsorBlock for YouTube adds a `style="display: flex;"` attribute */
+    > yt-formatted-string {
+      margin-inline: auto;
+    }
+  }
   #below #comments {
     width: var(--width--comments);
     max-width: var(--max-width--comments);
