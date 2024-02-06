@@ -61,14 +61,18 @@ Customize as preferred.
 
 
   /** Player controls and progressbar **/
-  .ytp-chrome-bottom {
+  #movie_player {
     --height--controls: 36px;
     --height--controls--shrink: 4px;
+    /* Slide controls down when precision seekbar is opened */
     --translateY--controls: calc( var(--height--controls) - ( 100% / 48 * 36 ) );
     /* --translateY--controls: calc( (1px - 100cqh / 48 ) * 40 ); */
+  }
+
+  .ytp-chrome-bottom {
     /* container-type: size; */
     /* Layer behind subtitles */
-    z-index: 30;
+    /* z-index: 30; */
     /* Disable JS-calculated positioning */
     width: unset !important;
     /* height is overridden by JS when opening precision seekbar */
@@ -89,7 +93,9 @@ Customize as preferred.
   /* Position controls */
   .html5-video-player:not(.ytp-player-minimized) .ytp-progress-bar-container {
     /* bottom: var(--height--controls); */
-    bottom: calc( var(--height--controls) - var(--translateY--controls));
+    /* bottom: calc( var(--controls-visible) * (var(--height--controls) - var(--translateY--controls)) ); */
+    /* Slide seekbar down when precision seekbar is opened */
+    bottom: calc( var(--height--controls) - var(--translateY--controls) );
     width: fit-content;
     /* width: var(--width--progressbar); */
     /* Center horizontally if JS restricts progressbar width - absolute positioning */
@@ -109,8 +115,9 @@ Customize as preferred.
   .ytp-chrome-controls.ytp-chrome-controls {
     position: absolute;
     /* bottom: 0; */
+    /* Slide controls down when precision seekbar is opened */
     bottom: calc( 0px - var(--translateY--controls) );
-    inset-inline: var(--ytd-margin-3x);;
+    inset-inline: var(--ytd-margin-3x);
     /* Controls' height is decreased from 48px */
     height: var(--height--controls);
 
@@ -140,11 +147,11 @@ Customize as preferred.
 
 
   /* Compress controls when inactive */
+  /*
   .ytp-progress-bar-container,
   .ytp-chrome-controls {
     transition: transform 50ms ease-in-out;
   }
-  /*, /* TEMP */
   .ytp-chrome-bottom:not( :focus-within, :hover ) {
     .ytp-progress-bar-container {
       transform: translateY(var(--height--controls--shrink));
@@ -153,8 +160,9 @@ Customize as preferred.
       transform: translateY(calc( var(--height--controls--shrink) / 2 ));
     }
   }
+  */
 
-  /* Slide controls down when precision seekbar is opened */
+  /* Don't animate when precision seekbar is opened */
   .ytp-progress-bar-container,
   .ytp-chrome-controls {
     .html5-video-player:is( .ytp-fine-scrubbing-enable, .seeking-mode ) & {
@@ -180,29 +188,66 @@ Customize as preferred.
   }
 
   /* Fade out player controls */
-  .ytp-chrome-bottom.ytp-chrome-bottom {
-    opacity: 0;
+  .ytp-progress-bar-list,
+  .ytp-time-current,
+  .ytp-chrome-controls {
+    /* opacity: 0; */
     transition: opacity 0.5s;
   }
   /* Disable hiding of player buttons and disable fade-out on inactivity */
   /* .ytp-autohide = .playing-mode and mouse didn't move for 3 seconds) */
   /* #movie_player for precedence */
-  #movie_player .ytp-button {
+  .ytp-chrome-bottom.ytp-chrome-bottom,
+  #movie_player .ytp-chrome-top .ytp-button,
+  #movie_player .ytp-chrome-controls .ytp-button {
     opacity: unset;
     transition: unset;
   }
-  /* Show controls when active */
-  .html5-video-player:is( .paused-mode, .playing-mode:not(.ytp-autohide) ),
-  .html5-video-player:has( .ytp-chrome-bottom:is( :focus-within, :hover ) ) {
-    .ytp-chrome-bottom {
-      opacity: 1;
+
+  /* Hide controls when inactive */
+  #movie_player {
+    --controls-visible: 0;
+    --delay--hiding: 3s;
+
+    /* Show controls when active */
+    .ytp-chrome-controls {
+      opacity: var(--controls-visible);
     }
-    /* Move subtitles up (.caption-window) */
+
+    .ytp-progress-bar-container {
+      transform: translateY(calc( (1 - var(--controls-visible)) * var(--height--controls) ));
+      transition: transform 0.15s ease-out;
+      /* bottom: 0px; */
+    }
+
+    /* Move subtitles up when controls are visible */
+    .ytp-caption-window-bottom {
+      margin-bottom: calc( var(--controls-visible) * (var(--height--controls) + 24px) );
+      transition: margin-bottom 0s;
+    }
     .ytp-caption-window-top {
       /* margin-top: 0; */
     }
+
+    .ytp-chrome-controls,
+    .ytp-progress-bar-container,
     .ytp-caption-window-bottom {
-      margin-bottom: 60px;
+      transition-delay: var(--delay--hiding);
+    }
+
+    /* Show controls when active */
+    /* &:is( .paused-mode, .playing-mode:not(.ytp-autohide) ), */
+    &:has( .caption-window:hover ),
+    &:has( .ytp-chrome-bottom:is( :focus-within, :hover ) ) {
+      --controls-visible: 1;
+      --delay--hiding: 0s;
+    }
+
+    &.ytp-autohide .ytp-progress-bar {
+      opacity: calc( 0.6 - 0.2 * var(--controls-visible) );
+    }
+    &.ytp-autohide .ytp-time-current {
+      opacity: 0.5;
     }
   }
 
@@ -240,7 +285,7 @@ Customize as preferred.
   /* Progressbar thickness */
   .ytp-progress-bar {
     --height--progress-bar: 5px;
-    --height--progress-bar--hover: 9px;
+    --scale--progress-bar--hover: 1.8;
     height: var(--height--progress-bar);
   }
   /* Progressbar thickness increased (normal: 3px->5px, hovered: 5px->5px) */
@@ -275,19 +320,23 @@ Customize as preferred.
     transform: unset;
   }
   /* .ytp-progress-list IS the place to increase progressbar thickness on the hovered chapter */
+  .ytp-chapter-hover-container:hover,
   .ytp-drag .ytp-exp-chapter-hover-effect,
-  .ytp-exp-chapter-hover-container:hover,
   .ytp-progress-bar-container:hover:not([aria-disabled=true]) .ytp-exp-chapter-hover-effect,
-  .ytp-timed-markers-enabled.ytp-progress-bar-container:hover:not([aria-disabled=true]) {
+  .ytp-progress-bar-container:hover:not([aria-disabled=true]).ytp-timed-markers-enabled {
     .ytp-progress-list {
-      /* transform: scaleY(calc( var(--height--progress-bar--hover) / var(--height--progress-bar) )); */
-      height: var(--height--progress-bar--hover);
-      bottom: calc( (var(--height--progress-bar--hover) - var(--height--progress-bar)) / 2 );
+      transform: scaleY(var(--scale--progress-bar--hover));
+      /* height: calc( var(--height--progress-bar) * var(--scale--progress-bar--hover)); */
+      /* bottom: calc( var(--height--progress-bar) * (var(--scale--progress-bar--hover) - 1) / 2 ); */
       /* bottom: 2px; */
     }
   }
-  .ytp-progress-list,
   .ytp-timed-markers-container {
+    pointer-events: none;
+    
+    > * {
+      pointer-events: all;
+    }
     /* transition: transform .1s ease-out; */
     /* scaleY from bottom up when hovered */
     /* transform-origin: bottom left; */
@@ -301,16 +350,19 @@ Customize as preferred.
     /* Position dot is vertically centered */
     top: calc( 50% - var(--size) / 2 );
     left: calc( 0% - var(--size) / 2 );
+    pointer-events: none;
   }
   .ytp-scrubber-button.ytp-scrubber-button {
     height: 100%;
     width: 100%;
     border-radius: 50%;
   }
-  .ytp-progress-bar-container:hover:not([aria-disabled=true]) .ytp-scrubber-button.ytp-scrubber-button-hover,
-  .ytp-drag .ytp-scrubber-button.ytp-scrubber-button-hover {
-    /* Bit smaller dot */
-    transform: scale(1.4);
+  .ytp-scrubber-button.ytp-scrubber-button-hover {
+    .ytp-progress-bar-container:hover:not([aria-disabled=true]) &,
+    .ytp-drag & {
+      /* Bit smaller dot */
+      transform: scale(1.4);
+    }
   }
 
 
@@ -420,9 +472,11 @@ Customize as preferred.
   /* Subtitles occupy only the space necessary for text to capture mouse only over text */
   .caption-window {
     /* z-index: unset; - breaks .ytp-rollup-mode, captions are invisible (behind video) */
+    /* Move in front of controls (z=59)*/
+    z-index: 80;
     width: fit-content !important;
     /* Don't animate move */
-    transition: unset !important;
+    /* transition: unset !important; */
   }
   /* Subtitle background is only on .caption-window where 'W' key changes the opacity */
   .ytp-caption-segment {
@@ -495,7 +549,7 @@ Customize as preferred.
     margin-bottom: var(--ytd-margin-2x);
   }
   #clarify-box#clarify-box {
-    margin-top: var(--ytd-margin-2x);
+    margin-block: 0 var(--ytd-margin-2x);
   }
   #clarify-box:empty {
     display: none;
@@ -693,8 +747,8 @@ Customize as preferred.
     transition: opacity 1s, visibility 1s;
     /* Don't hide by .ytp-cued-thumbnail-overlay[aria-hidden=true] set by JS */
     opacity: 1;
-    /* Layer above video */
-    z-index: 50;
+    /* Layer above video (z:10), below .ytp-doubletap-ui-legacy.ytp-time-seeking (z:19) */
+    z-index: 15;
 
     &:has( .ytp-cued-thumbnail-overlay-image[style*=background-image] ) {
       background-color: var(--bgcolor--video);
