@@ -846,6 +846,39 @@ Customize as preferred.
   }
 
 
+  /* Seek notification is smaller */
+  .ytp-doubletap-static-circle {
+    display: none;
+  }
+  .ytp-doubletap-seek-info-container {
+    padding: 10px;
+    border-radius: 50px;
+    box-shadow: 0 0 10px 4px rgb(0 0 0/50%);
+    background-color: rgba(0,0,0,.6);
+    aspect-ratio: 1.0;
+    width: fit-content;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  /* Arrows */
+  .ytp-doubletap-arrows-container {
+    display: flex;
+    /* Replace empty border-left/right with smaller gap */
+    gap: 2px;
+  }
+  .ytp-doubletap-base-arrow {
+    /* Remove empty space */
+    border-inline: 0px;
+  }
+  /* Text "5 seconds" */
+  .ytp-doubletap-ui-legacy .ytp-doubletap-tooltip.ytp-doubletap-tooltip {
+    margin-left: 3px;
+    padding-top: 4px;
+  }
+
+
 
   /* Enhancer for Youtube addon's style fixes */
   .ytd-watch-flexy:not(#engagement-panel-scrim) {
