@@ -173,8 +173,9 @@ Customize as preferred.
 
 
   /* Controls have translucent background */
-  .ytp-chrome-bottom {
-    background-image: linear-gradient(to top, rgb(0 0 0 / 30%), rgb(0 0 0 / 10%) var(--height--controls), rgb(0 0 0 / 0%));
+  .ytp-chrome-controls {
+    /* background-image: linear-gradient(to top, rgb(0 0 0 / 30%), rgb(0 0 0 / 10%) var(--height--controls), rgb(0 0 0 / 0%)); */
+    background-image: linear-gradient(to top, rgb(0 0 0 / 30%), rgb(0 0 0 / 10%));
     /* Timestamp and chapter title has text shadow */
     text-shadow: 1px 1px 2px black;
   }
@@ -189,6 +190,7 @@ Customize as preferred.
 
   /* Fade out player controls */
   .ytp-progress-bar-list,
+  #movie_player .ytp-heat-map-container,
   .ytp-time-current,
   .ytp-chrome-controls {
     /* opacity: 0; */
@@ -207,17 +209,48 @@ Customize as preferred.
   /* Hide controls when inactive */
   #movie_player {
     --controls-visible: 0;
-    --delay--hiding: 3s;
+    --delay--hiding: 0.2s;
+
+    /* Show controls when active */
+    /* &:is( .paused-mode, .playing-mode:not(.ytp-autohide) ), */
+    &:has( .caption-window:hover ),
+    &:has( .ytp-chrome-bottom:is( :focus-within, :hover ) ) {
+      --controls-visible: 1;
+      --delay--hiding: 0s;
+    }
 
     /* Show controls when active */
     .ytp-chrome-controls {
       opacity: var(--controls-visible);
     }
 
-    .ytp-progress-bar-container {
-      transform: translateY(calc( (1 - var(--controls-visible)) * var(--height--controls) ));
-      transition: transform 0.15s ease-out;
+    /* Move progressbar up when active */
+    .ytp-progress-bar {
+      transform:
+        translateY(calc( (1 - var(--controls-visible)) * var(--height--controls) ))
+        scaleY(calc( 1 + 0.6 * (1 - var(--controls-visible)) ))
+        !important;
+      transform-origin: left bottom;
+      /* transition: transform 0.15s ease-out; */
       /* bottom: 0px; */
+    }
+
+    /* Show heatmap when active */
+    &.ytp-heat-map:not(.ad-showing) .ytp-heat-map-container {
+      opacity: var(--controls-visible);
+    }
+    .ytp-heat-map-container {
+      display: block;
+    }
+
+    /* Fade out progressbar when not updated */
+    &.ytp-autohide:not(.progress-bar-updated) {
+      .ytp-progress-bar {
+        opacity: calc( 0.6 - 0.2 * var(--controls-visible) );
+      }
+      .ytp-time-current {
+        opacity: 0.5;
+      }
     }
 
     /* Move subtitles up when controls are visible */
@@ -229,25 +262,12 @@ Customize as preferred.
       /* margin-top: 0; */
     }
 
+    /* Delay hiding controls, must be after transition definitions for precedence */
     .ytp-chrome-controls,
-    .ytp-progress-bar-container,
+    .ytp-progress-bar,
+    .ytp-heat-map-container,
     .ytp-caption-window-bottom {
       transition-delay: var(--delay--hiding);
-    }
-
-    /* Show controls when active */
-    /* &:is( .paused-mode, .playing-mode:not(.ytp-autohide) ), */
-    &:has( .caption-window:hover ),
-    &:has( .ytp-chrome-bottom:is( :focus-within, :hover ) ) {
-      --controls-visible: 1;
-      --delay--hiding: 0s;
-    }
-
-    &.ytp-autohide .ytp-progress-bar {
-      opacity: calc( 0.6 - 0.2 * var(--controls-visible) );
-    }
-    &.ytp-autohide .ytp-time-current {
-      opacity: 0.5;
     }
   }
 
@@ -267,7 +287,7 @@ Customize as preferred.
   .ytp-progress-bar {
     position: relative;
     /* Disable translateY positioning by JS */
-    transform: unset !important;
+    /* transform: unset !important; */
   }
   #movie_player .ytp-heat-map-container {
     /* The 5px for progressbar is substituted with relative positioning */
@@ -279,12 +299,15 @@ Customize as preferred.
   }
   .ytp-heat-map-chapter.ytp-heatmap-hover {
     bottom: 0;
+  }
+  .ytp-progress-bar-container:hover .ytp-heat-map-chapter.ytp-heatmap-hover {
     transform: translateY(-2px);
   }
 
   /* Progressbar thickness */
   .ytp-progress-bar {
     --height--progress-bar: 5px;
+    /* --height--progress-bar: calc( 8px - 3px * var(--controls-visible) ); */
     --scale--progress-bar--hover: 1.8;
     height: var(--height--progress-bar);
   }
@@ -427,7 +450,7 @@ Customize as preferred.
     /* top: -45px; */
     /* Highlight when hovered */
     /* background-color: #ffffff0c; */
-    background-color: #ffffff18;
+    background-color: #ffffff10;
   }
   /* Leave space for buttons when precision seekbar (.ytp-fine-scrubbing-container) is active */
   .ytp-fine-scrubbing-enable {
@@ -475,6 +498,8 @@ Customize as preferred.
     /* Move in front of controls (z=59)*/
     z-index: 80;
     width: fit-content !important;
+    border-radius: 6px;
+    box-shadow: var(--box-shadow--message);
     /* Don't animate move */
     /* transition: unset !important; */
   }
@@ -542,6 +567,14 @@ Customize as preferred.
     --max-width--player: min( var(--ytd-watch-flexy-max-player-width) * 2.5 , var(--ytd-watch-flexy-max-player-height) * 2.5 );
     --width--player: clamp( var(--min-width--player) , var(--width-base--primary) , var(--max-width--player) );
     --width--description: clamp( var(--width--comments) , var(--width--player) , var(--max-width--description) );
+
+    ytd-watch-flexy:not([is-two-columns_]) & {
+      --width-base--primary: 100vw;
+      --width-base--primary: calc( 100vw - 2 * var(--margin--columns) );
+    }
+  }
+  #below {
+    width: 100%;
   }
   /* Margin between player and description, comments */
   .ytd-page-manager[full-bleed-player] #full-bleed-container,
@@ -716,6 +749,11 @@ Customize as preferred.
     overflow-y: scroll;
     /* Allocate space for the scrollbar to avoid layout change (reflow) when content is loaded below the first page */
     scrollbar-gutter: stable;
+    /* Hide scrollbar */
+    /* scrollbar-width: none; */
+  }
+  ytd-app[scrolling] {
+    overflow-x: hidden;
   }
   /* TODO: skeleton player positioning with secondary column width
   ytd-watch-flexy[flexy] #secondary.ytd-watch-flexy {
@@ -743,12 +781,14 @@ Customize as preferred.
   }
 
 
-  /* Background color */
   :root {
-    /* #0f0f0f */
+    /* Background color */
+    /* Original: #0f0f0f */
     --bgcolor--video: var(--yt-spec-base-background);
     --bgcolor--video: #111;
     --bgcolor--video: #080808;
+    /* Make font-size follow browser setting: 0.625 = 10px/16px */
+    font-size: 0.625em !important;
   }
 
   /* Fade from video thumbnail to video on first play */
@@ -823,7 +863,7 @@ Customize as preferred.
   }
   #collapse.ytd-text-inline-expander {
     color: mediumpurple;
-    font-size: 18px;
+    font-size: 1.8rem;
     position: absolute;
     height: 30px;
     top: -30px;
@@ -846,8 +886,12 @@ Customize as preferred.
 
 
   /* Volume percentage (when changing) is round */
+  .html5-video-player {
+    --background-color--message: rgb(0 0 0/50%);
+    --box-shadow--message: 0 0 10px 4px rgb(0 0 0/60%);
+  }
   .ytp-bezel-text {
-    box-shadow: 0 0 10px 4px rgb(0 0 0/50%);
+    box-shadow: var(--box-shadow--message);
     border-radius: 2em;
     /* border-radius: 100%; */
     padding: 10px 14px;
@@ -862,8 +906,8 @@ Customize as preferred.
   .ytp-doubletap-seek-info-container {
     padding: 10px;
     border-radius: 50px;
-    box-shadow: 0 0 10px 4px rgb(0 0 0/50%);
-    background-color: rgba(0,0,0,.6);
+    box-shadow: var(--box-shadow--message);
+    background-color: var(--background-color--message);
     aspect-ratio: 1.0;
     width: fit-content;
     display: flex;
@@ -943,4 +987,31 @@ Customize as preferred.
     margin-top: 0px;
   }
 
+
+  #header.ytd-browse {
+    position: sticky;
+    top: -410px;
+    /* top: calc( 100% - 48px ); */
+  }
+
+  #page-manager.ytd-app {
+    overflow: unset;
+  }
+
+  ytd-browse {
+    overflow: clip;
+    overflow: unset;
+  }
+
+  #wrapper.tp-yt-app-header-layout > [slot=header] {
+    position: static;
+  }
+
+  #contentContainer.tp-yt-app-header-layout {
+    display: none;
+  }
+
+  tp-yt-app-header#header {
+    transform: unset !important;
+  }
 }
