@@ -72,7 +72,6 @@ Customize as preferred.
   .ytd-page-manager[theater]:not([fullscreen]) #full-bleed-container {
     max-height: 100vh;
     min-height: 100vh;
-    margin: unset;
   }
 
 
@@ -151,7 +150,8 @@ Customize as preferred.
   }
   /* Search */
   #center.ytd-masthead {
-    height: 40px;
+    /* height: 40px; */
+    height: var(--height--search);
   }
   ytd-searchbox.ytd-masthead,
   #search-form.ytd-searchbox,
@@ -174,17 +174,20 @@ Customize as preferred.
     width: unset;
     aspect-ratio: 1;
   }
-  /* Top bar is thinner in theater and fullscreen mode */
-  #masthead:is( [theater], [fullscreen] ) {
+
+  /* Top bar is thinner */
+  #container.ytd-masthead {
+    height: 44px;
+    /* --height--search: calc( 100% - 2 * 8px ); */
+    --height--search: 34px;
+  }
+  /* Top bar is thicker in basic mode */
+  #masthead:not( [theater], [fullscreen] ) {
     /* Header */
     #container.ytd-masthead {
-      height: 40px;
-    }
-    /* Search */
-    #center.ytd-masthead {
-      height: 30px;
     }
   }
+
   /* Search suggestions popup was off-screen */
   .gstl_50.sbdd_a {
     /* Fix miscalculated position when scrolled down */
@@ -192,7 +195,7 @@ Customize as preferred.
 
     /* Theater mode has thinner searchbox */
     body:has( #masthead:is( [theater], [fullscreen] ) ) & {
-      top: 36px !important;
+      top: 40px !important;
     }
   }
 
