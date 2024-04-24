@@ -21,7 +21,9 @@ ytd-page-manager#page-manager  >  ytd-watch-flexy.ytd-page-manager
 movie_player - theater mode
 --
 // Part of page load
-body  >  ytd-app  >  div#content  >  ytd-page-manager#page-manager
+body  >  ytd-app
+// Created by DOMContentLoaded
+>  div#content  >  ytd-page-manager#page-manager
 // Created 1st step
 >  ytd-watch-flexy.ytd-page-manager
 >  div#full-bleed-container  >  div#player-full-bleed-container
