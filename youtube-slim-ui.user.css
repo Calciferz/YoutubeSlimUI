@@ -95,11 +95,12 @@ Customize as preferred.
     /* bottom: calc( var(--controls-visible) * (var(--height--controls) - var(--translateY--controls)) ); */
     /* Slide seekbar down when precision seekbar is opened */
     bottom: calc( var(--height--controls) - var(--translateY--controls) );
-    width: fit-content;
+    /* width: fit-content; */
     /* width: var(--width--progressbar); */
+    width: calc( 100% - 2 * var(--padding-inline--controls) );
+    inset-inline: var(--padding-inline--controls);
     /* Center horizontally if JS restricts progressbar width - absolute positioning */
     margin-inline: auto;
-    inset-inline: var(--padding-inline--controls);
     /* Center horizontally if JS restricts progressbar width - relative positioning */
     /* position: relative; */
     align-self: center;
