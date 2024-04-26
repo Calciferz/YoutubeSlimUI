@@ -497,6 +497,7 @@ Customize as preferred.
     /* Move in front of controls (z=59)*/
     z-index: 80;
     width: fit-content !important;
+    min-width: 25vw;
     border-radius: 6px;
     box-shadow: var(--box-shadow--message);
     /* Don't animate move */
