@@ -172,12 +172,24 @@ Customize as preferred.
   }
 
 
-  /* Controls have translucent background */
   .ytp-chrome-controls {
-    /* background-image: linear-gradient(to top, rgb(0 0 0 / 30%), rgb(0 0 0 / 10%) var(--height--controls), rgb(0 0 0 / 0%)); */
-    background-image: linear-gradient(to top, rgb(0 0 0 / 30%), rgb(0 0 0 / 10%));
     /* Timestamp and chapter title has text shadow */
     text-shadow: 1px 1px 2px black;
+    color: #fff;
+
+    button {
+      text-shadow: inherit;
+    }
+  }
+  /* Controls have translucent background */
+  .ytp-chrome-controls::before {
+    /* background-image: linear-gradient(to top, rgb(0 0 0 / 30%), rgb(0 0 0 / 10%) var(--height--controls), rgb(0 0 0 / 0%)); */
+    background-image: linear-gradient( to top, rgb(0 0 0 / 30%), rgb(0 0 0 / 10%) );
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    display: block;
+    content: '';
   }
   /* Buttons have a shadow */
   .ytp-chrome-controls .ytp-button {
@@ -188,20 +200,12 @@ Customize as preferred.
     display: none;
   }
 
-  /* Fade out player controls */
-  .ytp-progress-bar-list,
-  #movie_player .ytp-heat-map-container,
-  .ytp-time-current,
-  .ytp-chrome-controls {
-    /* opacity: 0; */
-    transition: opacity 0.5s;
-  }
   /* Disable hiding of player buttons and disable fade-out on inactivity */
   /* .ytp-autohide = .playing-mode and mouse didn't move for 3 seconds) */
   /* #movie_player for precedence */
   .ytp-chrome-bottom.ytp-chrome-bottom,
-  #movie_player .ytp-chrome-top .ytp-button,
-  #movie_player .ytp-chrome-controls .ytp-button {
+  /* #movie_player .ytp-chrome-controls .ytp-button, */
+  #movie_player .ytp-chrome-top .ytp-button {
     opacity: unset;
     transition: unset;
   }
@@ -209,19 +213,35 @@ Customize as preferred.
   /* Hide controls when inactive */
   #movie_player {
     --controls-visible: 0;
-    --delay--hiding: 500ms;
+    /* Delay hiding */
+    --transition-dur--opacity: 500ms;
+    --transition-delay: 500ms;
 
     /* Show controls when active */
     /* &:is( .paused-mode, .playing-mode:not(.ytp-autohide) ), */
     &:has( .caption-window:hover ),
     &:has( .ytp-chrome-bottom:is( :focus-within, :hover ) ) {
       --controls-visible: 1;
-      --delay--hiding: 0s;
+      /* Don't delay showing */
+      --transition-delay: 0s;
     }
 
     /* Show controls when active */
-    .ytp-chrome-controls {
+    .ytp-chrome-controls::before,
+    .ytp-chrome-controls > * > * {
       opacity: var(--controls-visible);
+    }
+    .ytp-chrome-controls > * > * .ytp-button {
+      opacity: unset;
+    }
+
+    /* Show timestamp when moving mouse */
+    &:not(.ytp-autohide) .ytp-chrome-controls .ytp-time-display,
+    /* Show timestamp when paused */
+    &.paused-mode .ytp-chrome-controls .ytp-time-display {
+      opacity: 1;
+      --transition-dur--opacity: 100ms;
+      --transition-delay: 0s;
     }
 
     /* Move progressbar up when active */
@@ -233,6 +253,10 @@ Customize as preferred.
       transform-origin: left bottom;
       /* transition: transform 0.15s ease-out; */
       /* bottom: 0px; */
+      /* Delay transform until after controls are hidden */
+      transition:
+        opacity var(--transition-dur--opacity) var(--transition-delay),
+        transform 0s calc( 2 * var(--transition-delay) );
     }
 
     /* Show heatmap when active */
@@ -253,21 +277,31 @@ Customize as preferred.
       }
     }
 
+    /* Fade out player controls */
+    .ytp-time-current,
+    .ytp-heat-map-container,
+    .ytp-chrome-controls::before,
+    .ytp-chrome-controls > * > * {
+      transition: opacity var(--transition-dur--opacity);
+      /* Delay hiding controls */
+      transition-delay: var(--transition-delay);
+    }
+
+    .ytp-time-current,
+    .ytp-time-separator,
+    .ytp-time-duration {
+      color: unset;
+    }
+
     /* Move subtitles up when controls are visible */
     .ytp-caption-window-bottom {
       margin-bottom: calc( var(--controls-visible) * (var(--height--controls) + 24px) );
       transition: margin-bottom 0s;
+      /* Delay hiding controls and moving subtitles */
+      transition-delay: calc( 2 * var(--transition-delay) );
     }
     .ytp-caption-window-top {
       /* margin-top: 0; */
-    }
-
-    /* Delay hiding controls, must be after transition definitions for precedence */
-    .ytp-chrome-controls,
-    .ytp-progress-bar,
-    .ytp-heat-map-container,
-    .ytp-caption-window-bottom {
-      transition-delay: var(--delay--hiding);
     }
   }
 
