@@ -209,7 +209,7 @@ Customize as preferred.
   /* Hide controls when inactive */
   #movie_player {
     --controls-visible: 0;
-    --delay--hiding: 0.2s;
+    --delay--hiding: 500ms;
 
     /* Show controls when active */
     /* &:is( .paused-mode, .playing-mode:not(.ytp-autohide) ), */
