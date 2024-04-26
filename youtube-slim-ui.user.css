@@ -215,7 +215,8 @@ Customize as preferred.
     --controls-visible: 0;
     /* Delay hiding */
     --transition-dur--opacity: 500ms;
-    --transition-delay: 500ms;
+    --controls--transition-delay: 500ms;
+    --progressbar--transition-delay: calc( var(--controls--transition-delay) + 150ms );
 
     /* Show controls when active */
     /* &:is( .paused-mode, .playing-mode:not(.ytp-autohide) ), */
@@ -223,7 +224,8 @@ Customize as preferred.
     &:has( .ytp-chrome-bottom:is( :focus-within, :hover ) ) {
       --controls-visible: 1;
       /* Don't delay showing */
-      --transition-delay: 0s;
+      --controls--transition-delay: 0s;
+      --progressbar--transition-delay: 0s;
     }
 
     /* Show controls when active */
@@ -241,7 +243,7 @@ Customize as preferred.
     &.paused-mode .ytp-chrome-controls .ytp-time-display {
       opacity: 1;
       --transition-dur--opacity: 100ms;
-      --transition-delay: 0s;
+      --controls--transition-delay: 0s;
     }
 
     /* Move progressbar up when active */
@@ -255,8 +257,8 @@ Customize as preferred.
       /* bottom: 0px; */
       /* Delay transform until after controls are hidden */
       transition:
-        opacity var(--transition-dur--opacity) var(--transition-delay),
-        transform 0s calc( 2 * var(--transition-delay) );
+        opacity var(--transition-dur--opacity) var(--controls--transition-delay),
+        transform 0s var(--progressbar--transition-delay);
     }
 
     /* Show heatmap when active */
@@ -284,7 +286,7 @@ Customize as preferred.
     .ytp-chrome-controls > * > * {
       transition: opacity var(--transition-dur--opacity);
       /* Delay hiding controls */
-      transition-delay: var(--transition-delay);
+      transition-delay: var(--controls--transition-delay);
     }
 
     .ytp-time-current,
@@ -298,7 +300,7 @@ Customize as preferred.
       margin-bottom: calc( var(--controls-visible) * (var(--height--controls) + 24px) );
       transition: margin-bottom 0s;
       /* Delay hiding controls and moving subtitles */
-      transition-delay: calc( 2 * var(--transition-delay) );
+      transition-delay: var(--progressbar--transition-delay);
     }
     .ytp-caption-window-top {
       /* margin-top: 0; */
@@ -403,15 +405,20 @@ Customize as preferred.
   .ytp-scrubber-container.ytp-scrubber-container {
     --size: calc( var(--height--progress-bar) + 8px );
     height: var(--size);
-    width: var(--size);
+    width: 100%;
     /* Position dot is vertically centered */
     top: calc( 50% - var(--size) / 2 );
     left: calc( 0% - var(--size) / 2 );
     pointer-events: none;
   }
+  .play-time-set .ytp-scrubber-container {
+    /* Position dot positioned relative to width */
+    transform: translateX(calc( 100cqw * var(--play-time--relative) )) !important;
+    transform: translateX(calc( 100% * var(--play-time--relative) )) !important;
+  }
   .ytp-scrubber-button.ytp-scrubber-button {
-    height: 100%;
-    width: 100%;
+    height: var(--size);
+    width: var(--size);
     border-radius: 50%;
   }
   .ytp-scrubber-button.ytp-scrubber-button-hover {
@@ -454,6 +461,8 @@ Customize as preferred.
   .ytp-progress-bar {
     --top--capture-area: -40px;
     --bottom--capture-area: -5px;
+    /* Set 100cqw = progressbar width for .ytp-scrubber-container */
+    container-type: inline-size;
   }
   .ytp-progress-bar::before {
     /* background-color: #f706; */
