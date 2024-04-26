@@ -293,6 +293,10 @@ Customize as preferred.
     .ytp-time-separator,
     .ytp-time-duration {
       color: unset;
+      
+      .ytp-live & {
+        display: unset;
+      }
     }
 
     /* Move subtitles up when controls are visible */
