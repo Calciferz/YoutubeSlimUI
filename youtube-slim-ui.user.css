@@ -137,10 +137,10 @@ Customize as preferred.
     display: flex;
     align-items: center;
   }
-  /* Move timestamp to right side */
   .ytp-time-display {
-    margin-left: auto;
-    order: 2;
+    /* Move timestamp to right side */
+    /* margin-left: auto; */
+    /* order: 2; */
     /* Timestamp font is bigger */
     font-size: 1.8rem;
   }
