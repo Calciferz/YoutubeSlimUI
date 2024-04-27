@@ -34,6 +34,11 @@ Customize as preferred.
     font-size: 1.6rem;
   }
 
+  /* Remove new layout's scrollbar triggering whatever */
+  #cinematics {
+    display: none;
+  }
+
   /* Hide unused player buttons */
   .ytp-chrome-controls .ytp-button[data-tooltip-target-id="ytp-autonav-toggle-button"] {
     display: none;
