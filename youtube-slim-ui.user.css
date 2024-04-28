@@ -4,6 +4,7 @@
 @description  Usability tweaks: bigger font, progressbar easier to click, hide autoplay,miniplayer button, video suggestion cards subtly pop out, hide video suggestions in embedded player
 @author       Calcifer
 @license      MIT
+@copyright    Inspired by https://github.com/ibillingsley/userstyles/blob/master/youtube-full-theater.user.css
 @namespace    https://github.com/Calciferz
 @homepageURL  https://github.com/Calciferz/YoutubeSlimUI
 @supportURL   https://github.com/Calciferz/YoutubeSlimUI/issues
@@ -60,6 +61,33 @@ Customize as preferred.
   /* Raise overflowing precision seekbar thumbnails above title and suggested videos */
   #full-bleed-container {
     z-index: 1;
+  }
+
+
+
+  /* Full height player */
+  ytd-watch-flexy.ytd-page-manager[theater] #player-wide-container,
+  ytd-watch-flexy.ytd-page-manager[theater] #player-theater-container,
+  ytd-watch-flexy.ytd-page-manager[theater] #full-bleed-container {
+    max-height: 100vh;
+    min-height: 100vh;
+  }
+  /* Hide top bar */
+  #masthead[theater] {
+    height: 0;
+    opacity: 0;
+    transition: opacity 0.1s ease-in-out;
+  }
+  /* Show on hover */
+  #masthead[theater]:hover {
+    opacity: 1;
+  }
+  /* Remove top margin */
+  #masthead-container.ytd-app {
+    position: sticky;
+  }
+  #page-manager.ytd-app {
+    margin-top: 0;
   }
 
 
