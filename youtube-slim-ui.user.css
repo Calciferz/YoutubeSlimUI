@@ -923,6 +923,14 @@ Customize as preferred.
   .ytp-caption-segment {
     background-color: unset !important;
   }
+  /* Hide empty subtitle rows (an error in subtitle metadata: only a space in a row) */
+  /* In Selectors Level 4, the :empty selector was changed to act like :-moz-only-whitespace, but no browser currently supports this yet. */
+  .ytp-caption-segment:empty {
+    display: none;
+  }
+  .ytp-caption-segment:-moz-only-whitespace {
+    display: none;
+  }
 
 
 
