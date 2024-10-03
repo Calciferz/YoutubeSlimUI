@@ -1052,6 +1052,7 @@ Customize as preferred.
     display: flex;
     flex-direction: column;
     width: fit-content;
+    width: var(--width--player);
     max-width: 100%;
     align-items: center;
   }
