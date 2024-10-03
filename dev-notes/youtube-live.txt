@@ -1,0 +1,34 @@
+a.api.getProgressState().seekableEnd)
+2 !== a.api.getPresentingPlayerType()
+a.Db.endTimeMs / 1E3
+a.api.getVideoData()
+
+a = g.k
+g.k.updateVideoData
+videodatachange
+"dataupdated"
+
+ytp-time-display notranslate ytp-live
+
+<meta itemprop="isLiveBroadcast" content="True">
+
+var metaTag = document.querySelector('meta[itemprop="isLiveBroadcast"]')
+var isLiveBroadcast = document.querySelector('meta[itemprop="isLiveBroadcast"]')?.getAttribute('content')
+
+
+
+ytInitialPlayerResponse.videoDetails.isLiveContent
+true
+ytInitialPlayerResponse.videoDetails.isLive
+true / undefined
+ytInitialPlayerResponse.microformat.playerMicroformatRenderer.liveBroadcastDetails.isLiveNow
+true / false
+ytInitialPlayerResponse.microformat.playerMicroformatRenderer.lengthSeconds = 0
+
+
+_yt_player = g
+    g.k.Nc = function() {
+        YW(this);
+        var a = this.api.getCurrentTime();
+        (a < this.clipStart || a > this.clipEnd) && this.KK()
+    }
