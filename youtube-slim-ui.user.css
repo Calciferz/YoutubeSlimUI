@@ -69,6 +69,8 @@ Customize as preferred.
     --fadeout-delay: 500ms;
     --fadeout-duration: 500ms;
     --fadeout-duration--hover: 100ms;
+    --topbar-height: 44px;
+    --search-height: 34px;
   }
 
   html, [light] {
@@ -216,7 +218,7 @@ Customize as preferred.
   /* Search */
   #center.ytd-masthead {
     /* height: 40px; */
-    height: var(--height--search);
+    height: var(--search-height);
   }
   ytd-searchbox.ytd-masthead,
   #search-form.ytd-searchbox,
@@ -241,10 +243,12 @@ Customize as preferred.
   }
 
   /* Top bar is thinner */
+  ytd-watch-flexy {
+    --ytd-watch-flexy-masthead-height: var(--topbar-height);
+  }
   #container.ytd-masthead {
-    height: 44px;
-    /* --height--search: calc( 100% - 2 * 8px ); */
-    --height--search: 34px;
+    height: var(--topbar-height);
+    /* height: calc( 100% - 2 * 8px ); */
   }
   /* Top bar is thicker in basic mode */
   #masthead:not( [theater],[fullscreen] ) {
@@ -1057,6 +1061,11 @@ Customize as preferred.
   /* Column 2 - #secondary: suggested videos */
   yt-chip-cloud-renderer:not([no-top-margin]) yt-chip-cloud-chip-renderer.yt-chip-cloud-renderer {
     margin-top: 0px;
+  }
+  /* Column 2 - live chat in theater mode */
+  ytd-watch-flexy[fixed-panels] #chat.ytd-watch-flexy {
+    position: absolute;
+    /* top: var(--topbar-height); */
   }
 
 
