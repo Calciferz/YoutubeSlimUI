@@ -600,13 +600,16 @@ Customize as preferred.
       opacity: unset;
     }
 
-    /* Show timestamp when moving mouse */
-    &:not(.ytp-autohide) .ytp-chrome-controls .ytp-time-display,
-    /* Show timestamp when paused */
-    &.paused-mode .ytp-chrome-controls .ytp-time-display {
-      opacity: 1;
-      --transition-dur--opacity: 100ms;
-      --controls--transition-delay: 0s;
+    /* Show chapter title and timestamp when moving mouse */
+    &:not(.ytp-autohide) .ytp-chrome-controls,
+    /* Show chapter title and timestamp when paused */
+    &.paused-mode .ytp-chrome-controls {
+      .ytp-chapter-container,
+      .ytp-time-display {
+        opacity: 1;
+        --transition-dur--opacity: var(--fadeout-duration--hover);
+        --controls--transition-delay: 0s;
+      }
     }
 
     /* Move progressbar up when active */
