@@ -578,7 +578,8 @@ Customize as preferred.
     --controls-visible: 0;
     /* Delay hiding */
     --transition-dur--opacity: var(--fadeout-duration);
-    --controls--transition-delay: var(--fadeout-delay);
+    /* --controls--transition-delay: var(--fadeout-delay); */
+    --controls--transition-delay: 0;
     --progressbar--transition-delay: calc( var(--controls--transition-delay) + 150ms );
 
     /* Show controls when active */
