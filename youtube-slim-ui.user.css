@@ -117,8 +117,7 @@ Customize as preferred.
 
 
   /* Top bar hiding with fade-out and visibility */
-  #masthead[fullscreen],
-  #masthead[theater] {
+  #masthead:is( [theater],[fullscreen] ) {
     /* Fade in-out and enable/disable visibility (clickable). */
     transition:
       opacity var(--fadeout-duration) ease-out,
@@ -129,8 +128,8 @@ Customize as preferred.
     transition-delay: 0s, 0s;
   }
 
-  /* Theater mode top bar is hidden by default */
-  #masthead[theater]:not([fullscreen]) {
+  /* Theater and fullscreen mode top bar is hidden by default */
+  #masthead:is( [theater],[fullscreen] ) {
     opacity: 0;
   }
   /* Show top bar when dropdown is open */
@@ -139,8 +138,7 @@ Customize as preferred.
   #content:has( .ytp-chrome-top:is(:hover, :focus-within) ),
   /* Show top bar when hovered or focused */
   #masthead-container:is(:hover, :focus-within) {
-  /* #masthead[theater]:not([fullscreen]):is(:focus-within, :hover) { */
-    #masthead[theater]:not([fullscreen]) {
+    #masthead:is( [theater],[fullscreen] ) {
       opacity: 1;
       /* Fade in faster */
       transition-duration: var(--fadeout-duration--hover), var(--fadeout-duration--hover);
@@ -148,13 +146,6 @@ Customize as preferred.
     }
   }
 
-  /* Fullscreen top bar is hidden when scrolled to top and not focused */
-  ytd-app[masthead-hidden] #masthead[fullscreen]:not(:focus-within) {
-    /* Fade out */
-    opacity: 0;
-    /* Make top bar unclickable. Delayed until after fade out is finished. */
-    visibility: hidden;
-  }
   /* Fullscreen top bar fades out instead of sliding off-screen */
   ytd-app[masthead-hidden] #masthead-container.ytd-app {
     /* Disable sliding off-screen */
@@ -234,7 +225,7 @@ Customize as preferred.
     --height--search: 34px;
   }
   /* Top bar is thicker in basic mode */
-  #masthead:not( [theater], [fullscreen] ) {
+  #masthead:not( [theater],[fullscreen] ) {
     /* Header */
     #container.ytd-masthead {
     }
@@ -246,7 +237,7 @@ Customize as preferred.
     top: 52px !important;
 
     /* Theater mode has thinner searchbox */
-    body:has( #masthead:is( [theater], [fullscreen] ) ) & {
+    body:has( #masthead:is( [theater],[fullscreen] ) ) & {
       top: 40px !important;
     }
   }
@@ -258,8 +249,7 @@ Customize as preferred.
     position: sticky;
   }
   /* Collapse #masthead-container in fullscreen and theater mode: there's no space above player */
-  #masthead[fullscreen],
-  #masthead[theater] {
+  #masthead:is( [theater],[fullscreen] ) {
     position: fixed;
   }
   /* Remove top margin */
@@ -269,13 +259,13 @@ Customize as preferred.
 
 
   /* Move buttons in top-right corner below the top bar in theater mode */
-  .ytd-page-manager[theater]:not([fullscreen]) .ytp-overflow-panel-close,
-  .ytd-page-manager[theater]:not([fullscreen]) .ytp-chrome-top {
+  .ytd-page-manager:is( [theater],[fullscreen] ) .ytp-overflow-panel-close,
+  .ytd-page-manager:is( [theater],[fullscreen] ) .ytp-chrome-top {
     padding-top: 50px; /* masthead is 56px, buttons have 6px padding */
     height: unset;
   }
   /* Move endscreen video grid below the title */
-  .ytd-page-manager[theater]:not([fullscreen]) .ytp-endscreen-content {
+  .ytd-page-manager:is( [theater],[fullscreen] ) .ytp-endscreen-content {
     top: calc(50% + 50px);
   }
 
@@ -360,7 +350,7 @@ Customize as preferred.
   }
 
   /* Hide video title and buttons */
-  /* [full-bleed-player] === :is([theater], [fullscreen]) */
+  /* [full-bleed-player] === :is( [theater],[fullscreen] ) */
   .ytd-page-manager[full-bleed-player] .ytp-chrome-top {
     opacity: 0;
     /* No fade-out delay when hiding */
