@@ -65,6 +65,12 @@ Customize as preferred.
 
 
 
+  html {
+    --fadeout-delay: 500ms;
+    --fadeout-duration: 500ms;
+    --fadeout-duration--hover: 100ms;
+  }
+
   html, [light] {
     /* Add transparency to top bar, sidebar (#contentContainer.tp-yt-app-drawer) background */
     --yt-spec-base-background: #fffc;
@@ -113,8 +119,6 @@ Customize as preferred.
   /* Top bar hiding with fade-out and visibility */
   #masthead[fullscreen],
   #masthead[theater] {
-    --fadeout-duration: 700ms;
-    --fadeout-delay: 500ms;
     /* Fade in-out and enable/disable visibility (clickable). */
     transition:
       opacity var(--fadeout-duration) ease-out,
@@ -138,7 +142,7 @@ Customize as preferred.
     #masthead[theater]:not([fullscreen]) {
       opacity: 1;
       /* Fade in faster */
-      transition-duration: 100ms, 100ms;
+      transition-duration: var(--fadeout-duration--hover), var(--fadeout-duration--hover);
       transition-delay: 0s, 0s;
     }
   }
@@ -582,8 +586,8 @@ Customize as preferred.
   #movie_player {
     --controls-visible: 0;
     /* Delay hiding */
-    --transition-dur--opacity: 500ms;
-    --controls--transition-delay: 500ms;
+    --transition-dur--opacity: var(--fadeout-duration);
+    --controls--transition-delay: var(--fadeout-delay);
     --progressbar--transition-delay: calc( var(--controls--transition-delay) + 150ms );
 
     /* Show controls when active */
