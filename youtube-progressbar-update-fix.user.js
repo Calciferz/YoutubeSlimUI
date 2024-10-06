@@ -55,6 +55,8 @@ const progressUpdateInterval= 500;  // millisec
 
   function updateLiveDuration() {
     let dur= getDuration();
+    let liveStreaming = (elems.video.currentTime + 5 >= dur);
+    elems.player.classList.toggle('live-streaming', liveStreaming);
     elems.timeDuration.innerText= prettifyVideoTime(dur);
   }
 
