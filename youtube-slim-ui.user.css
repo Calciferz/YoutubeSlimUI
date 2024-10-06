@@ -126,6 +126,7 @@ Customize as preferred.
     transition-delay:
       var(--fadeout-delay),
       var(--fadeout-delay);
+    transition-delay: 0s, 0s;
   }
 
   /* Theater mode top bar is hidden by default */
@@ -355,32 +356,22 @@ Customize as preferred.
 
   /* Video title and buttons fade in-out */
   .ytp-chrome-top {
-    /* transition: opacity 100ms; */
-    /* transition: opacity 100ms cubic-bezier(.4,0,1,1); */ /* original */
-    /* transition-timing-function: ease; */
-    /* transition-timing-function: ease-in-out; */
-  }
-  /* Delay fade-in for a few seconds after paused, so a short pause won't create distraction. No delay when hovered. */
-  .paused-mode .ytp-chrome-top:not(:hover) {
-    transition-delay: 1s;
-    transition-duration: 500ms;
-  }
-  /* Short transition when hovered */
-  #movie_player.ytp-chrome-top:hover {
-    transition-delay: 0s;
-    /* transition-duration: 100ms; */
+    transition-duration: var(--fadeout-duration);
   }
 
-  /* Hide video title and buttons when playing and not hovered or focused */
+  /* Hide video title and buttons */
   /* [full-bleed-player] === :is([theater], [fullscreen]) */
-  .ytd-page-manager[full-bleed-player] .playing-mode:not(.unstarted-mode) .ytp-chrome-top:not(:hover):not(:focus-within) {
+  .ytd-page-manager[full-bleed-player] .ytp-chrome-top {
     opacity: 0;
     /* No fade-out delay when hiding */
     transition-delay: 0s;
   }
-  /* Show video title and buttons when search is focused */
+  /* Show video title and buttons before video is started or when hovered or focused or search is focused */
+  .ytd-page-manager[full-bleed-player] .unstarted-mode .ytp-chrome-top,
+  .ytd-page-manager[full-bleed-player] .ytp-chrome-top:is(:hover, :focus-within),
   #masthead-container:is(:hover, :focus-within) ~ #page-manager .ytp-chrome-top {
     opacity: 1;
+    transition-duration: var(--fadeout-duration--hover);
   }
 
   /* Disable hiding of player top buttons and disable fade-out on inactivity */
