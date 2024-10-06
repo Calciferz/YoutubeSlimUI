@@ -35,7 +35,7 @@ const progressUpdateInterval= 500;  // millisec
   }
 
   function getDuration() {
-    return metadata.live ? getLastBufferEnd() : elems.video.duration;
+    return metadata.liveVideo ? getLastBufferEnd() : elems.video.duration;
   }
 
   function prettifyVideoTime(time) {
@@ -48,7 +48,7 @@ const progressUpdateInterval= 500;  // millisec
   }
 
   function updateCurrentTime() {
-    elems.currentTime.innerText= prettifyVideoTime(elems.video.currentTime);
+    elems.timeCurrent.innerText= prettifyVideoTime(elems.video.currentTime);
     updatePlayProgress();
   }
 
@@ -130,7 +130,7 @@ const progressUpdateInterval= 500;  // millisec
   }
 
   function updateChapters() {
-    metadata.live= elems.timeDisplay.classList.contains('ytp-live');
+    metadata.liveVideo= elems.timeDisplay.classList.contains('ytp-live');
 
     let progressBar= elems.progressBar;
     elems.chapterContainers= progressBar.getElementsByClassName('ytp-chapter-hover-container');
@@ -147,7 +147,7 @@ const progressUpdateInterval= 500;  // millisec
     let player= elems.player;
     let video= elems.video= player.querySelector('video');
     elems.timeDisplay= player.querySelector('.ytp-time-display');
-    elems.currentTime= player.querySelector('.ytp-time-current');
+    elems.timeCurrent= player.querySelector('.ytp-time-current');
     elems.progressBar= player.querySelector('.ytp-progress-bar');
     elems.scrubberContainer= player.querySelector('.ytp-scrubber-container');
 
