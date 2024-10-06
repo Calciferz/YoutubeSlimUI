@@ -666,13 +666,18 @@ Customize as preferred.
       }
     }
 
+    /* Don't move subtitles up when controls are visible */
+    .ytp-caption-window-bottom {
+      margin-bottom: 24px;
+    }
     /* Move subtitles up when controls are visible */
+    /*
     .ytp-caption-window-bottom {
       margin-bottom: calc( var(--controls-visible) * (var(--height--controls) + 24px) );
       transition: margin-bottom 0s;
-      /* Delay hiding controls and moving subtitles */
       transition-delay: var(--progressbar--transition-delay);
     }
+    */
     .ytp-caption-window-top {
       /* margin-top: 0; */
     }
