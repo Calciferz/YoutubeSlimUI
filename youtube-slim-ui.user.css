@@ -583,8 +583,8 @@ Customize as preferred.
 
     /* Show controls when active */
     /* &:is( .paused-mode, .playing-mode:not(.ytp-autohide) ), */
-    &:has( .caption-window:hover ),
-    &:has( .ytp-chrome-bottom:is( :focus-within, :hover ) ) {
+    /* Show controls when hovered but subtitles aren't dragged */
+    &:has( .ytp-chrome-bottom:is( :focus-within, :hover ) ):not(:has( .caption-window.ytp-dragging )) {
       --controls-visible: 1;
       /* Don't delay showing */
       --controls--transition-delay: 0s;
@@ -908,8 +908,8 @@ Customize as preferred.
   /* Subtitles occupy only the space necessary for text to capture mouse only over text */
   .caption-window {
     /* z-index: unset; - breaks .ytp-rollup-mode, captions are invisible (behind video) */
-    /* Move in front of controls (z=59)*/
-    z-index: 80;
+    /* Move subtitles (z=40) behind controls (z=59)*/
+    /* z-index: 50; */
     width: fit-content !important;
     min-width: 25vw;
     border-radius: 6px;
