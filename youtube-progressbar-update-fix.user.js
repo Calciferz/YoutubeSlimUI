@@ -147,6 +147,7 @@ const progressUpdateInterval= 500;  // millisec
 
   function updateChapters() {
     metadata.liveVideo= elems.timeDisplay.classList.contains('ytp-live');
+    elems.player.classList.toggle('live-video', metadata.liveVideo);
 
     let progressBar= elems.progressBar;
     elems.chapterContainers= progressBar.getElementsByClassName('ytp-chapter-hover-container');
