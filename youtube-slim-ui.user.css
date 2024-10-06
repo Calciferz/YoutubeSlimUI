@@ -532,6 +532,12 @@ Customize as preferred.
       display: unset;
     }
   }
+  .ytp-time-separator,
+  .ytp-time-duration {
+    .live-streaming & {
+      display: none;
+    }
+  }
 
 
   /* Compress controls when inactive */
