@@ -1187,21 +1187,11 @@ Customize as preferred.
 
 
 
-  /* Fade in whole page */
-  ytd-app {
-    opacity: 0;
-    filter: blur(10px);
-    --duration--fade: 0.5s;
-    --duration--fade: 1s;
-    transition: filter var(--duration--fade), opacity var(--duration--fade);
-    transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
-    transition-timing-function: ease-out;
-  }
+  /* Video thumbnail is loaded */
+  /*
   ytd-app:has( .ytp-cued-thumbnail-overlay-image[style*=background-image] ) {
-    /* Unblur after video thumbnail is loaded */
-    opacity: 1;
-    filter: blur(0px);
   }
+  */
 
 
   :root {
