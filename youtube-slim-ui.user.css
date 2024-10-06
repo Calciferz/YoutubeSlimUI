@@ -103,6 +103,28 @@ Customize as preferred.
     /* Fade video less */
     --app-drawer-scrim-background: rgb(0 0 0 / 20%);
   }
+  body {
+    overflow-y: scroll;
+    /* Allocate space for the scrollbar to avoid layout change (reflow) when content is loaded below the first page */
+    scrollbar-gutter: stable;
+    /* Hide scrollbar */
+    /* scrollbar-width: none; */
+  }
+  /* Don't lock scrollbar when sidebar is open (fullscreen) */
+  body.no-scroll {
+    overflow-y: scroll !important;
+  }
+  /* Don't lock scrollbar when sidebar is open (non-fullscreen) */
+  body.lock-scrollbar {
+    position: unset;
+  }
+  /* Set proper html height to enable scrollbar when sidebar is open */
+  ytd-app {
+    position: unset;
+  }
+  ytd-app[scrolling] {
+    overflow-x: hidden;
+  }
 
 
 
@@ -1163,16 +1185,6 @@ Customize as preferred.
   }
   ytd-masthead.shell {
     display: none;
-  }
-  body {
-    overflow-y: scroll;
-    /* Allocate space for the scrollbar to avoid layout change (reflow) when content is loaded below the first page */
-    scrollbar-gutter: stable;
-    /* Hide scrollbar */
-    /* scrollbar-width: none; */
-  }
-  ytd-app[scrolling] {
-    overflow-x: hidden;
   }
   /* TODO: skeleton player positioning with secondary column width
   ytd-watch-flexy[flexy] #secondary.ytd-watch-flexy {
