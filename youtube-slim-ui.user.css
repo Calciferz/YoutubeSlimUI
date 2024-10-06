@@ -756,6 +756,10 @@ Customize as preferred.
     transform-origin: bottom left;
     */
   }
+  .ytp-load-progress,
+  .ytp-play-progress {
+    transform: scaleX( var(--chapter-progress, 0) ) !important;
+  }
 
 
   .ytp-chapters-container {
