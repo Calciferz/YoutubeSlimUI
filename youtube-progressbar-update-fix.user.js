@@ -109,6 +109,9 @@ const progressUpdateInterval= 500;  // millisec
 
   function updateLoadProgress() {
     // update load progress (buffer)
+    // can't calculate if live video
+    // if (metadata.liveVideo)  return updateLiveDuration();
+    if (metadata.liveVideo)  return;
     updateProgressBar(elems.chaptersLoadProgress, getLastBufferEnd());
   }
 
