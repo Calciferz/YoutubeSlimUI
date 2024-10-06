@@ -78,14 +78,16 @@ const progressUpdateInterval= 500;  // millisec
 
     // loop inside chapters
     let chaptersPixelWidthUntilCurrentChapter= 0;
+    let currentChapter= 0;
     for (let i= 0; i < chapterContainers.length; i++) {
-      // if current time is bigger than durationWidthRatio * (chapters pixel width including current one) scale the current chapter to 1 because we passed it
+      // chapters before current: current time is bigger than durationWidthRatio * (chapters pixel width including current one)
       if (timestamp > durationWidthRatio * (chaptersPixelWidthUntilCurrentChapter + chapterContainers[i].offsetWidth)) {
-        chaptersProgress[i].style.transform= "scaleX(1)";
+        // chaptersProgress[i].style.transform= "scaleX(1)";
+        // chapter passed: full width progress
+        chaptersProgress[i].style.setProperty('--chapter-progress', 1);
 
         // increase the current chapters location by adding last watched chapter
         chaptersPixelWidthUntilCurrentChapter += chapterContainers[i].offsetWidth;
-
       } else {
         // If not, it means that we are on this chapter.
         // Find the appropriate size for the chapter and scale it
@@ -94,10 +96,15 @@ const progressUpdateInterval= 500;  // millisec
         // total chapter time
         let currentChapterLengthInSeconds= durationWidthRatio * chapterContainers[i].offsetWidth;
         let currentChapterTimeRatio= currentTimeInChapterInSeconds / currentChapterLengthInSeconds
-        chaptersProgress[i].style.transform= `scaleX(${currentChapterTimeRatio})`;
-
+        currentChapter= i;
+        // chaptersProgress[i].style.transform= `scaleX(${currentChapterTimeRatio})`;
+        chaptersProgress[i].style.setProperty('--chapter-progress', currentChapterTimeRatio);
         break;
       }
+    }
+    for (let i= currentChapter + 1; i < chapterContainers.length; i++) {
+      // chapters after current: zero width progress
+      chaptersProgress[i].style.setProperty('--chapter-progress', 0);
     }
   }
 
