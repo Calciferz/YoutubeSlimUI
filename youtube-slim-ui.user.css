@@ -523,6 +523,15 @@ Customize as preferred.
     /* Timestamp font is bigger */
     font-size: 1.8rem;
   }
+  .ytp-time-current,
+  .ytp-time-separator,
+  .ytp-time-duration {
+    color: unset;
+      
+    .ytp-live & {
+      display: unset;
+    }
+  }
 
 
   /* Compress controls when inactive */
@@ -670,16 +679,6 @@ Customize as preferred.
       transition: opacity var(--transition-dur--opacity);
       /* Delay hiding controls */
       transition-delay: var(--controls--transition-delay);
-    }
-
-    .ytp-time-current,
-    .ytp-time-separator,
-    .ytp-time-duration {
-      color: unset;
-      
-      .ytp-live & {
-        display: unset;
-      }
     }
 
     /* Don't move subtitles up when controls are visible */

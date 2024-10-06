@@ -49,7 +49,13 @@ const progressUpdateInterval= 500;  // millisec
 
   function updateCurrentTime() {
     elems.timeCurrent.innerText= prettifyVideoTime(elems.video.currentTime);
+    if (metadata.liveVideo)  updateLiveDuration();
     updatePlayProgress();
+  }
+
+  function updateLiveDuration() {
+    let dur= getDuration();
+    elems.timeDuration.innerText= prettifyVideoTime(dur);
   }
 
   function updatePositionScrubber() {
@@ -158,6 +164,7 @@ const progressUpdateInterval= 500;  // millisec
     let video= elems.video= player.querySelector('video');
     elems.timeDisplay= player.querySelector('.ytp-time-display');
     elems.timeCurrent= player.querySelector('.ytp-time-current');
+    elems.timeDuration= player.querySelector('.ytp-time-duration');
     elems.progressBar= player.querySelector('.ytp-progress-bar');
     elems.scrubberContainer= player.querySelector('.ytp-scrubber-container');
 
