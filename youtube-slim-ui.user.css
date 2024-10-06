@@ -812,9 +812,8 @@ Customize as preferred.
     height: var(--size);
     width: var(--size);
     border-radius: 50%;
-  }
-  .ytp-scrubber-button.ytp-scrubber-button-hover {
-    .ytp-progress-bar-container:hover:not([aria-disabled=true]) &,
+
+    .ytp-chrome-bottom:hover .ytp-progress-bar-container:not([aria-disabled=true]) &,
     .ytp-drag & {
       /* Bit smaller dot */
       transform: scale(1.4);
