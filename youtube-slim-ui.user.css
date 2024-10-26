@@ -31,8 +31,10 @@ Customize as preferred.
 
   /* Restore default 16px font-size. :root font-size is 10px */
   ytd-text-inline-expander,
-  #content-text.ytd-comment-renderer {
+  #content-text.ytd-comment-renderer,
+  #content-text.ytd-comment-view-model {
     font-size: 1.6rem;
+    line-height: 1.2;
   }
 
   /* Remove new layout's scrollbar triggering whatever */
