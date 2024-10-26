@@ -160,6 +160,9 @@ const progressUpdateInterval= 500;  // millisec
       console.error('[YoutubeProgressbarUpdateFix] chapter number mismatch:', elems.chapterContainers, elems.chaptersPlayProgress, elems.chaptersLoadProgress);
       debugger;
     }
+
+    updatePlayProgress();
+    updateLoadProgress();
   }
 
   function initPlayer() {
@@ -171,6 +174,7 @@ const progressUpdateInterval= 500;  // millisec
     elems.progressBar= player.querySelector('.ytp-progress-bar');
     elems.scrubberContainer= player.querySelector('.ytp-scrubber-container');
 
+    updateChapters();
     updatePositionScrubber();
     // elems.progressBar.style.setProperty('--play-time--relative', 0);
     elems.progressBar.classList.add('play-time-set');
