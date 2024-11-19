@@ -995,6 +995,7 @@ Customize as preferred.
     /* width: fit-content; */
     max-width: unset;
     justify-content: center;
+    justify-content: space-evenly;
 
     & > * {
       padding-top: unset;
@@ -1012,9 +1013,10 @@ Customize as preferred.
     /* Dynamic layout */
     max-width: unset;
     flex: unset;
-    --max-width--comments: 1000px;
     --max-width--comments: 1100px;
+    --max-width--comments: 100em;
     --max-width--description: calc( 2 * var(--max-width--comments) );
+    --max-width--description: var(--max-width--comments);
     --width-base--primary: calc( 100vw - var(--ytd-watch-flexy-sidebar-width) - 2 * var(--margin--columns) - var(--gap--columns) );
     --width--comments: min( var(--max-width--comments) , var(--width-base--primary) );
     --min-width--player: var(--width--comments);
@@ -1026,6 +1028,10 @@ Customize as preferred.
       --width-base--primary: 100vw;
       --width-base--primary: calc( 100vw - 2 * var(--margin--columns) );
     }
+  }
+  ytd-watch-flexy[flexy] #primary.ytd-watch-flexy {
+    /* margin-left: unset; */
+    /* padding-left: var(--ytd-margin-6x); */
   }
   #below {
     width: 100%;
@@ -1100,7 +1106,7 @@ Customize as preferred.
     aspect-ratio: var(--ytd-watch-flexy-width-ratio) / var(--ytd-watch-flexy-height-ratio);
     /* max-height calculated from viewport - header - space below */
     width: var(--width--player);
-    --height--for-aspect-ratio: calc( var(--width--player) / (var(--ytd-watch-flexy-width-ratio) / var(--ytd-watch-flexy-height-ratio)) );
+    --height--for-aspect-ratio: calc( var(--width--player) / (var(--ytd-watch-flexy-width-ratio) / var(--1-height-ratio)) );
     --max-height: calc( 100vh - var(--ytd-watch-flexy-masthead-height) - var(--ytd-margin-3x) - var(--ytd-watch-flexy-space-below-player) );
     --min-height: min( 0.5 * var(--width--comments) / ( var(--ytd-watch-flexy-width-ratio) / var(--ytd-watch-flexy-height-ratio) ) , var(--max-height) );
     height: clamp( var(--min-height) , var(--height--for-aspect-ratio) , var(--max-height) );
