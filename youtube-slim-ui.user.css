@@ -141,6 +141,10 @@ Customize as preferred.
     min-height: 100vh;
   }
 
+  #player-full-bleed-container#player-full-bleed-container {
+    /* (2,0,0) specificity and important to override Enhancer for Youtube addon */
+    height: 100% !important;
+  }
 
   /* Top bar hiding with fade-out and visibility */
   #masthead:is( [theater],[fullscreen] ) {
@@ -1154,18 +1158,19 @@ Customize as preferred.
   ytd-watch-flexy[flexy] #player-container-outer.ytd-watch-flexy,
   ytd-watch-flexy[flexy] #player-container-inner.ytd-watch-flexy,
   ytd-watch-flexy[flexy] #player-container.ytd-watch-flexy,
-  .html5-video-container {
+  #movie_player.html5-video-container {
     height: 100%;
     /* width inherited also due to block layout */
     /* width: 100%; */
   }
 
   /* Level 0: video */
-  .html5-main-video.html5-main-video {
+  #movie_player#movie_player .html5-main-video {
     /* Can affect parent's size */
     position: static;
     /* Center vertically and horizontally */
-    margin: auto;
+    /* (2,1,0) specificity and important to override Enhancer for Youtube addon */
+    margin: auto !important;
     /* Don't clip video if there is a miscalculation */
     object-fit: contain;
     /* Use as much space as available */
