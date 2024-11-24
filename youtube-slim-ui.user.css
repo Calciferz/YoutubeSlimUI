@@ -507,7 +507,7 @@ Customize as preferred.
     height: var(--height--controls);
 
     /* Button width does not change in fullscreen .big-mode */
-    .ytp-button:not(.ytp-chapter-title) {
+    .ytp-button:not(.ytp-chapter-title):not(.ytp-live-badge) {
       width: 48px;
     }
     /* Button rendering height is the original so it's not shrinking */
