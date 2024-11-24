@@ -638,6 +638,11 @@ Customize as preferred.
       opacity: unset;
     }
 
+    /* Show title when moving mouse */
+    &:not(.ytp-autohide) .ytp-chrome-top {
+      opacity: 1;
+    }
+
     /* Show chapter title and timestamp when moving mouse */
     &:not(.ytp-autohide) .ytp-chrome-controls,
     /* Show chapter title and timestamp when paused */
