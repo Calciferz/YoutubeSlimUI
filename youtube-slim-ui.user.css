@@ -655,6 +655,19 @@ Customize as preferred.
       }
     }
 
+    &:not(.ytp-ad-overlay-open):not(.ytp-hide-controls) {
+      .ytp-iv-player-content,
+      .ytp-timely-actions-content {
+        bottom: 11px;
+        transform: translateY( calc( -50px * var(--controls-visible) ) );
+        transition: transform cubic-bezier(.4,0,1,1) 100ms;
+
+        &:hover {
+          --controls-visible: 1;
+        }
+      }
+    }
+
     /* Move progressbar up when active */
     .ytp-progress-bar {
       transform:
