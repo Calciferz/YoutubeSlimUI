@@ -162,17 +162,29 @@ Customize as preferred.
   #masthead:is( [theater],[fullscreen] ) {
     opacity: 0;
   }
+  /* Extend title bottom padding to trigger hover */
+  .ytd-page-manager[full-bleed-player] .ytp-chrome-top {
+    padding-block: 0px calc( var(--topbar-height) + 15px );
+  }
+
   /* Show top bar when dropdown is open */
   ytd-app:has( ytd-popup-container tp-yt-iron-dropdown:not([style~="display:"]) ),
   /* Show top bar when title is hovered or focused */
   #content:has( .ytp-chrome-top:is(:hover, :focus-within) ),
   /* Show top bar when hovered or focused */
-  #masthead-container:is(:hover, :focus-within) {
+  #content:has( #masthead-container:is(:hover, :focus-within) ) {
     #masthead:is( [theater],[fullscreen] ) {
       opacity: 1;
       /* Fade in faster */
       transition-duration: var(--fadeout-duration--hover), var(--fadeout-duration--hover);
       transition-delay: 0s, 0s;
+    }
+
+    /* Move video title and buttons below topbar when hovered or focused or search is focused */
+    .ytd-page-manager[full-bleed-player] .ytp-chrome-top {
+      padding-block: var(--topbar-height) 15px;
+      /* Slide in title with delay instead of fading in */
+      transition: padding var(--fadeout-duration--hover) linear var(--fadeout-duration);
     }
   }
 
@@ -290,14 +302,8 @@ Customize as preferred.
   }
 
 
-  /* Move buttons in top-right corner below the top bar in theater mode */
-  .ytd-page-manager:is( [theater],[fullscreen] ) .ytp-overflow-panel-close,
-  .ytd-page-manager:is( [theater],[fullscreen] ) .ytp-chrome-top {
-    padding-top: 50px; /* masthead is 56px, buttons have 6px padding */
-    height: unset;
-  }
   /* Move endscreen video grid below the title */
-  .ytd-page-manager:is( [theater],[fullscreen] ) .ytp-endscreen-content {
+  .ytd-page-manager[full-bleed-player] .ytp-endscreen-content {
     top: calc(50% + 50px);
   }
 
@@ -309,7 +315,6 @@ Customize as preferred.
   .ytp-chrome-top {
     /* background-image: linear-gradient(to top, rgb(0 0 0 / 0%), rgb(0 0 0 / 40%) 40px, rgb(0 0 0 / 70%) 100%); */
     /* background-image: linear-gradient(to top, rgb(0 0 0 / 0%), rgb(0 0 0 / 25%) 40px, rgb(0 0 0 / 50%) 100%); */
-    padding-bottom: 30px;
     left: 0 !important;
     width: 100% !important;
   }
