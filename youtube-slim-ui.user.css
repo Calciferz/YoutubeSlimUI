@@ -370,6 +370,10 @@ Customize as preferred.
     padding: 0px 10px;
     display: inline-block;
   }
+  .html5-video-player a:hover {
+    /* Undo Enhancer for Youtube addon title shadow removal */
+    text-shadow: unset !important;
+  }
   .ytp-title-link {
     display: inline;
   }
