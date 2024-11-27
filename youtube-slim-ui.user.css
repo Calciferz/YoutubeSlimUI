@@ -166,9 +166,19 @@ Customize as preferred.
   .ytd-page-manager[full-bleed-player] .ytp-chrome-top {
     padding-block: 0px calc( var(--topbar-height) + 15px );
   }
+  /* Show playlist menu below topbar */
+  .ytd-page-manager[full-bleed-player] .ytp-playlist-menu {
+    top: var(--topbar-height);
+  }
 
   /* Show top bar when dropdown is open */
   ytd-app:has( ytd-popup-container tp-yt-iron-dropdown:not([style~="display:"]) ),
+  /* Show top bar when sidebar is open */
+  #content:has( #contentContainer[opened] ),
+  /* Show top bar when sidebar is closing and hovered */
+  #content:has( #guide-content:hover ),
+  /* Show top bar when playlist menu is open */
+  #content:has( .ytp-playlist-menu:not([style~="display:"]) ),
   /* Show top bar when title is hovered or focused */
   #content:has( .ytp-chrome-top:is(:hover, :focus-within) ),
   /* Show top bar when hovered or focused */
