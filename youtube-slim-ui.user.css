@@ -423,10 +423,16 @@ Customize as preferred.
     }
   }
 
+  /* Show info button in top-right corner */
+  .ytp-cards-button {
+    /* #movie_player for precedence */
+    #movie_player & {
+      display: unset;
+    }
+  }
   /* Show title in theater mode: disable .ytp-hide-info-bar (active when not fullscreen) */
   /* and .ytp-autohide (active when paused or for 3 seconds after mouse activity). */
   /* Note: .ytp-autohide-active is added (increases precedence) for < 1s while fading out. */
-  .ytp-cards-button,
   .ytp-playlist-menu-button,
   .ytp-back-button,
   /* .ytp-title-channel, */
