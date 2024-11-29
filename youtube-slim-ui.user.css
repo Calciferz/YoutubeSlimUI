@@ -639,7 +639,7 @@ Customize as preferred.
   #movie_player {
     --controls-visible: 0;
     /* Delay hiding */
-    --transition-dur--opacity: var(--fadeout-duration);
+    --transition-dur--opacity: var(--fadeout-duration--hover);
     /* --controls--transition-delay: var(--fadeout-delay); */
     --controls--transition-delay: 0;
     --progressbar--transition-delay: calc( var(--controls--transition-delay) + 150ms );
